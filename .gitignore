@@ -1,0 +1,8 @@
+# Lokale Entpackungs-Artefakte
+/extracted/
+
+# Editor
+.DS_Store
+.idea/
+.vscode/
+*.log

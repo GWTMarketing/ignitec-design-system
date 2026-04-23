@@ -1,0 +1,395 @@
+/*
+Theme Name: Ignitec Child (Bricks)
+Theme URI: https://ignitec.at
+Description: Child-Theme für Ignitec auf Bricks Builder. Enthält globale Design-Tokens, Typographie und WooCommerce-Erweiterungen.
+Author: Ignitec
+Version: 1.0.0
+Template: bricks
+Text Domain: ignitec
+*/
+
+/* =========================================================
+   IGNITEC · DESIGN TOKENS
+   Quelle: Brand Strategy Rev 3.0 (April 2026)
+   Diese Variablen sind in ALLEN Bricks Code Widgets verfügbar.
+   ========================================================= */
+
+:root {
+  /* ---------- BRAND COLORS ---------- */
+  --copper-light:  #D06E3D;
+  --copper-mid:    #80401D;
+  --copper-deep:   #3A1612;
+  --copper-solid:  #793907;
+  --slateblue:     #152234;
+  --bone:          #F5F2EC;
+  --ember:         #E8622A;
+
+  /* ---------- INK (Dark UI Neutral) ---------- */
+  --ink-000: #0B121C;
+  --ink-100: #121A26;
+  --ink-200: #1A2432;
+  --ink-300: #22303F;
+  --ink-400: #2C3A4B;
+  --ink-500: #3D4A5C;
+
+  /* ---------- LIGHT NEUTRAL ---------- */
+  --bone-50:  #FBF9F4;
+  --bone-100: #F5F2EC;
+  --bone-200: #ECE6DA;
+  --bone-300: #D9D1BF;
+  --bone-400: #A89F8A;
+  --bone-500: #6F6757;
+
+  /* ---------- SEMANTIC FG/BG ---------- */
+  --fg-1: var(--slateblue);
+  --fg-2: #3A4656;
+  --fg-3: #6F7A8A;
+  --fg-on-dark-1: var(--bone);
+  --fg-on-dark-2: #B8BFC9;
+  --fg-on-dark-3: #7F8897;
+
+  --bg-page:         var(--bone);
+  --bg-surface:      #FFFFFF;
+  --bg-dark:         var(--ink-000);
+  --bg-dark-surface: var(--ink-100);
+
+  --accent:       var(--copper-solid);
+  --accent-hover: #6A3206;
+  --accent-press: #5A2A05;
+
+  /* ---------- GRADIENTS ---------- */
+  --gradient-copper:      linear-gradient(135deg, #3A1612 0%, #80401D 45%, #D06E3D 100%);
+  --gradient-copper-cta:  linear-gradient(135deg, #6B3410 0%, #C8691E 40%, #F4A962 75%, #FFD8A6 100%);
+  --gradient-copper-soft: linear-gradient(180deg, #D06E3D 0%, #80401D 100%);
+  --gradient-slate-fade:  linear-gradient(180deg, #152234 0%, #0B121C 100%);
+  --gradient-text-ember:  linear-gradient(92deg, #B7591E 0%, #E89A5C 55%, #F0B074 100%);
+
+  /* ---------- TYPOGRAPHY STACKS ---------- */
+  --ff-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --ff-body:    "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --ff-mono:    "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+  --ff-logo:    "Poppins", "Helvetica Neue", Arial, sans-serif;
+
+  /* ---------- TYPE SCALE (fluid) ---------- */
+  --fs-hero:     clamp(56px, 8.2vw, 144px);
+  --fs-h1:       clamp(44px, 5.4vw, 78px);
+  --fs-h2:       clamp(32px, 3.4vw, 52px);
+  --fs-h3:       clamp(22px, 2.0vw, 32px);
+  --fs-h4:       20px;
+  --fs-body:     17px;
+  --fs-body-sm:  15px;
+  --fs-caption:  13px;
+  --fs-eyebrow:  11px;
+  --fs-tech:     13px;
+
+  /* ---------- SPACING (8-pt grid) ---------- */
+  --s-0: 0;
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+  --s-10: 128px;
+
+  /* ---------- RADII ---------- */
+  --r-0: 0;
+  --r-1: 2px;
+  --r-2: 4px;
+  --r-3: 6px;
+  --r-4: 10px;
+  --r-5: 14px;
+  --r-pill: 999px;
+
+  /* ---------- ELEVATION ---------- */
+  --shadow-0: none;
+  --shadow-1: 0 1px 2px rgba(21,34,52,0.06), 0 1px 1px rgba(21,34,52,0.04);
+  --shadow-2: 0 2px 6px rgba(21,34,52,0.08), 0 1px 2px rgba(21,34,52,0.05);
+  --shadow-3: 0 8px 24px rgba(21,34,52,0.10), 0 2px 6px rgba(21,34,52,0.06);
+  --shadow-4: 0 24px 56px rgba(21,34,52,0.14), 0 6px 16px rgba(21,34,52,0.08);
+  --shadow-ember: 0 0 0 3px rgba(232,98,42,0.25);
+  --shadow-focus: 0 0 0 3px rgba(121,57,7,0.30);
+
+  /* ---------- BORDERS ---------- */
+  --border-hairline: 1px solid rgba(21,34,52,0.10);
+  --border-soft:     1px solid rgba(21,34,52,0.16);
+  --border-strong:   1px solid rgba(21,34,52,0.32);
+  --border-dark:     1px solid rgba(245,242,236,0.10);
+
+  /* ---------- MOTION ---------- */
+  --ease-standard: cubic-bezier(.2,.6,.2,1);
+  --ease-exit:     cubic-bezier(.4,.0,.6,1);
+  --dur-fast:   120ms;
+  --dur-base:   220ms;
+  --dur-slow:   420ms;
+
+  /* ---------- LAYOUT ---------- */
+  --container-max: 1280px;
+  --container-pad: 28px;
+  --section-pad-y: 96px;
+  --section-pad-y-mobile: 64px;
+}
+
+/* =========================================================
+   FONT-FACE (Archivo · lokal)
+   Die .ttf-Dateien liegen in /wp-content/themes/ignitec-child/fonts/
+   ========================================================= */
+
+@font-face {
+  font-family: "Archivo";
+  src: url("fonts/Archivo-VariableFont_wdth_wght.ttf") format("truetype-variations"),
+       url("fonts/Archivo-VariableFont_wdth_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-stretch: 62.5% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Archivo";
+  src: url("fonts/Archivo-Italic-VariableFont_wdth_wght.ttf") format("truetype-variations"),
+       url("fonts/Archivo-Italic-VariableFont_wdth_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-stretch: 62.5% 125%;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* =========================================================
+   BASE · TYPO · RESET-LITE
+   ========================================================= */
+
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body.bricks-is-frontend,
+body {
+  font-family: var(--ff-body);
+  font-weight: 300;
+  font-size: var(--fs-body);
+  line-height: 1.65;
+  color: var(--fg-1);
+  background: var(--bg-page);
+  text-rendering: optimizeLegibility;
+}
+
+h1, .h1 {
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: var(--fs-h1);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  color: var(--fg-1);
+  margin: 0;
+  text-wrap: balance;
+}
+h1 .black, .h1 .black { font-weight: 900; }
+
+h2, .h2 {
+  font-family: var(--ff-display);
+  font-weight: 500;
+  font-size: var(--fs-h2);
+  line-height: 1.03;
+  letter-spacing: -0.04em;
+  color: var(--fg-1);
+  margin: 0;
+  text-wrap: balance;
+}
+h2 .black, .h2 .black { font-weight: 900; }
+
+h3, .h3 {
+  font-family: var(--ff-display);
+  font-weight: 500;
+  font-size: var(--fs-h3);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--fg-1);
+  margin: 0;
+}
+
+h4, .h4 {
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: var(--fs-h4);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--fg-1);
+  margin: 0;
+}
+
+.hero {
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: var(--fs-hero);
+  line-height: 0.96;
+  letter-spacing: -0.045em;
+  color: var(--fg-1);
+  text-wrap: balance;
+}
+.hero .black { font-weight: 900; }
+
+p { margin: 0 0 1em 0; color: var(--fg-1); text-wrap: pretty; }
+p.lead { font-size: 19px; line-height: 1.55; color: var(--fg-2); max-width: 60ch; }
+small, .caption { font-size: var(--fs-caption); line-height: 1.6; color: var(--fg-3); }
+strong, b { font-weight: 600; color: var(--slateblue); }
+em { font-style: normal; font-weight: 500; }
+
+a {
+  color: var(--copper-solid);
+  text-decoration: none;
+  text-underline-offset: 3px;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+a:hover { color: var(--accent-hover); text-decoration: underline; }
+
+.eyebrow {
+  font-family: var(--ff-mono);
+  font-weight: 500;
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--copper-solid);
+  display: inline-block;
+}
+.tech-data, code, kbd, samp, pre {
+  font-family: var(--ff-mono);
+  font-weight: 400;
+  font-size: var(--fs-tech);
+  letter-spacing: 0.04em;
+  color: var(--fg-2);
+}
+.label {
+  font-family: var(--ff-mono);
+  font-weight: 500;
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+.wordmark {
+  font-family: var(--ff-logo);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  color: var(--slateblue);
+}
+.claim {
+  font-family: var(--ff-mono);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--copper-solid);
+}
+
+/* Utilities */
+.on-dark, .on-dark h1, .on-dark h2, .on-dark h3, .on-dark h4, .on-dark p { color: var(--fg-on-dark-1); }
+.on-dark .eyebrow { color: var(--copper-light); }
+.on-dark strong { color: var(--bone); }
+
+.copper-text {
+  background: var(--gradient-copper-soft);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.bg-bone   { background: var(--bone); }
+.bg-slate  { background: var(--slateblue); color: var(--bone); }
+.bg-ink    { background: var(--ink-000); color: var(--bone); }
+.bg-copper { background: var(--gradient-copper); color: var(--bone); }
+
+::selection { background: var(--copper-solid); color: var(--bone); }
+
+/* =========================================================
+   GLOBAL CONTAINER + SECTION PADDING (für Bricks Sections nutzbar)
+   ========================================================= */
+
+.ign-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: var(--container-pad);
+  padding-right: var(--container-pad);
+}
+.ign-section {
+  padding-top: var(--section-pad-y);
+  padding-bottom: var(--section-pad-y);
+}
+@media (max-width: 768px) {
+  .ign-section {
+    padding-top: var(--section-pad-y-mobile);
+    padding-bottom: var(--section-pad-y-mobile);
+  }
+}
+
+/* =========================================================
+   CTA-BUTTONS (global wiederverwendbar)
+   ========================================================= */
+
+.ign-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--ff-display);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1;
+  padding: 14px 22px;
+  border-radius: var(--r-3);
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform var(--dur-fast) var(--ease-standard),
+              box-shadow var(--dur-base) var(--ease-standard),
+              background-color var(--dur-base) var(--ease-standard);
+}
+.ign-btn:hover { transform: translateY(-1px); text-decoration: none; }
+.ign-btn:active { transform: translateY(0); }
+.ign-btn:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+
+.ign-btn--primary {
+  color: var(--bone);
+  background: var(--gradient-copper-cta);
+  box-shadow: var(--shadow-2);
+}
+.ign-btn--primary:hover {
+  color: var(--bone);
+  box-shadow: var(--shadow-3);
+}
+
+.ign-btn--ghost {
+  color: var(--bone);
+  background: transparent;
+  border: 1.5px solid rgba(245,242,236,0.65);
+  padding: 13px 21px;
+}
+.ign-btn--ghost:hover { background: rgba(245,242,236,0.08); color: var(--bone); }
+
+.ign-btn--ghost-dark {
+  color: var(--slateblue);
+  background: transparent;
+  border: 1.5px solid rgba(21,34,52,0.28);
+  padding: 13px 21px;
+}
+.ign-btn--ghost-dark:hover {
+  background: rgba(21,34,52,0.04);
+  color: var(--slateblue);
+  border-color: var(--slateblue);
+}
+
+.ign-btn--bone-on-copper {
+  color: var(--slateblue);
+  background: var(--bone);
+}
+.ign-btn--bone-on-copper:hover { color: var(--slateblue); }
+
+/* =========================================================
+   A11Y · Reduced Motion
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
