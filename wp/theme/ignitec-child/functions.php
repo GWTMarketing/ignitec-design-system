@@ -348,3 +348,343 @@ remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
 remove_action( 'wp_head', 'wp_generator' );
 remove_action( 'wp_head', 'rsd_link' );
 remove_action( 'wp_head', 'wlwmanifest_link' );
+
+
+/* =========================================================
+ * 8 · CUSTOM POST TYPE · IGNITEC_APPLICATION
+ *
+ * Redaktionelle Anwendungs-Seiten (BESS, Schaltschrank, …)
+ * mit eigener URL-Struktur /anwendungen/<slug>/. Produkt-Listen
+ * werden dynamisch per pa_einsatzbereich-Attribut eingebunden.
+ * ========================================================= */
+
+add_action( 'init', function () {
+	register_post_type( 'ignitec_application', [
+		'labels' => [
+			'name'               => __( 'Anwendungen', 'ignitec' ),
+			'singular_name'      => __( 'Anwendung', 'ignitec' ),
+			'add_new_item'       => __( 'Neue Anwendung', 'ignitec' ),
+			'edit_item'          => __( 'Anwendung bearbeiten', 'ignitec' ),
+			'all_items'          => __( 'Alle Anwendungen', 'ignitec' ),
+			'menu_name'          => __( 'Anwendungen', 'ignitec' ),
+		],
+		'public'              => true,
+		'has_archive'         => 'anwendungen',
+		'rewrite'             => [ 'slug' => 'anwendungen', 'with_front' => false ],
+		'supports'            => [ 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields' ],
+		'menu_icon'           => 'dashicons-shield',
+		'menu_position'       => 22,
+		'show_in_rest'        => true,
+	] );
+} );
+
+// Custom Meta · Anwendungs-Seite
+add_action( 'add_meta_boxes', function () {
+	add_meta_box(
+		'ignitec_app_meta',
+		__( 'Ignitec Anwendungs-Daten', 'ignitec' ),
+		function ( $post ) {
+			wp_nonce_field( 'ignitec_app_meta', 'ignitec_app_meta_nonce' );
+			$lead       = get_post_meta( $post->ID, '_ignitec_app_lead', true );
+			$volume_txt = get_post_meta( $post->ID, '_ignitec_app_volume_range', true );
+			$risk_txt   = get_post_meta( $post->ID, '_ignitec_app_risk', true );
+			$filter_tax = get_post_meta( $post->ID, '_ignitec_app_filter_term', true );
+			?>
+			<p>
+				<label><strong><?php esc_html_e( 'Lead / Kurzintro (für Hero)', 'ignitec' ); ?></strong></label><br>
+				<textarea name="_ignitec_app_lead" rows="3" style="width:100%;"><?php echo esc_textarea( $lead ); ?></textarea>
+			</p>
+			<p>
+				<label><strong><?php esc_html_e( 'Typisches Schutzvolumen (z. B. "0,3 – 5 m³")', 'ignitec' ); ?></strong></label><br>
+				<input type="text" name="_ignitec_app_volume_range" value="<?php echo esc_attr( $volume_txt ); ?>" style="width:100%;">
+			</p>
+			<p>
+				<label><strong><?php esc_html_e( 'Typische Risiken (kurzer Fließtext)', 'ignitec' ); ?></strong></label><br>
+				<textarea name="_ignitec_app_risk" rows="2" style="width:100%;"><?php echo esc_textarea( $risk_txt ); ?></textarea>
+			</p>
+			<p>
+				<label><strong><?php esc_html_e( 'Slug aus pa_einsatzbereich für Produkt-Filter (z. B. "bess", "schaltschrank")', 'ignitec' ); ?></strong></label><br>
+				<input type="text" name="_ignitec_app_filter_term" value="<?php echo esc_attr( $filter_tax ); ?>" style="width:100%;">
+			</p>
+			<?php
+		},
+		'ignitec_application',
+		'normal',
+		'default'
+	);
+} );
+
+add_action( 'save_post_ignitec_application', function ( $post_id ) {
+	if ( ! isset( $_POST['ignitec_app_meta_nonce'] ) ) { return; }
+	if ( ! wp_verify_nonce( $_POST['ignitec_app_meta_nonce'], 'ignitec_app_meta' ) ) { return; }
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) { return; }
+	if ( ! current_user_can( 'edit_post', $post_id ) ) { return; }
+
+	$fields = [
+		'_ignitec_app_lead'         => 'textarea',
+		'_ignitec_app_volume_range' => 'text',
+		'_ignitec_app_risk'         => 'textarea',
+		'_ignitec_app_filter_term'  => 'text',
+	];
+	foreach ( $fields as $key => $type ) {
+		$raw = isset( $_POST[ $key ] ) ? wp_unslash( $_POST[ $key ] ) : '';
+		$clean = $type === 'textarea' ? sanitize_textarea_field( $raw ) : sanitize_text_field( $raw );
+		update_post_meta( $post_id, $key, $clean );
+	}
+} );
+
+
+/* =========================================================
+ * 9 · KONTAKT-FORMULAR · HANDLER
+ *
+ * Verarbeitet POST aus dem Bricks-Code-Widget Kontaktformular.
+ * - Nonce + Honeypot + einfache Rate-Limit via Transient
+ * - Mail an office@ignitec.at + Auto-Reply an Absender:in
+ * - Optional: Brevo-Newsletter-Opt-In
+ * - Antwortet mit JSON (fetch) oder Redirect (non-JS-Fallback)
+ * ========================================================= */
+
+add_action( 'admin_post_nopriv_ignitec_inquiry', 'ignitec_handle_inquiry' );
+add_action( 'admin_post_ignitec_inquiry',        'ignitec_handle_inquiry' );
+
+function ignitec_handle_inquiry() {
+
+	$is_ajax = ! empty( $_SERVER['HTTP_X_REQUESTED_WITH'] )
+		&& strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) === 'xmlhttprequest';
+
+	$respond = function ( $ok, $msg, $fields = [] ) use ( $is_ajax ) {
+		if ( $is_ajax ) {
+			wp_send_json( [
+				'ok'      => (bool) $ok,
+				'message' => $msg,
+				'fields'  => $fields,
+			], $ok ? 200 : 422 );
+		}
+		$redirect = $ok
+			? add_query_arg( 'ignitec_inquiry', 'sent', wp_get_referer() ?: home_url( '/kontakt/' ) )
+			: add_query_arg( 'ignitec_inquiry', 'error', wp_get_referer() ?: home_url( '/kontakt/' ) );
+		wp_safe_redirect( $redirect . '#ign-form' );
+		exit;
+	};
+
+	// Honeypot
+	if ( ! empty( $_POST['ignitec_website'] ) ) {
+		$respond( true, '' );
+	}
+
+	// Nonce
+	if ( ! isset( $_POST['ignitec_nonce'] ) || ! wp_verify_nonce( $_POST['ignitec_nonce'], 'ignitec_inquiry' ) ) {
+		$respond( false, __( 'Sicherheits-Token abgelaufen. Bitte Seite neu laden.', 'ignitec' ) );
+	}
+
+	// Rate-Limit (1 Submission / 30 s pro IP)
+	$ip  = isset( $_SERVER['REMOTE_ADDR'] ) ? preg_replace( '/[^0-9a-fA-F\.:]/', '', $_SERVER['REMOTE_ADDR'] ) : 'anon';
+	$key = 'ignitec_rl_' . md5( $ip );
+	if ( get_transient( $key ) ) {
+		$respond( false, __( 'Bitte einen Moment warten, bevor Sie erneut absenden.', 'ignitec' ) );
+	}
+	set_transient( $key, 1, 30 );
+
+	// Input sammeln
+	$in = [];
+	foreach ( [
+		'anrede','firma','vorname','nachname','email','telefon',
+		'einsatzbereich','schutzvolumen','temp_bereich','ausloesung','zeitrahmen','nachricht',
+	] as $f ) {
+		$in[ $f ] = isset( $_POST[ $f ] ) ? sanitize_text_field( wp_unslash( $_POST[ $f ] ) ) : '';
+	}
+	$in['nachricht']  = isset( $_POST['nachricht'] ) ? sanitize_textarea_field( wp_unslash( $_POST['nachricht'] ) ) : '';
+	$in['consent']    = ! empty( $_POST['consent'] );
+	$in['newsletter'] = ! empty( $_POST['newsletter'] );
+
+	// Pflichtfelder
+	$errors = [];
+	if ( ! $in['firma'] )                              { $errors[] = 'firma'; }
+	if ( ! $in['nachname'] )                           { $errors[] = 'nachname'; }
+	if ( ! $in['email'] || ! is_email( $in['email'] ) ){ $errors[] = 'email'; }
+	if ( ! $in['consent'] )                            { $errors[] = 'consent'; }
+	if ( $errors ) {
+		$respond( false, __( 'Bitte Pflichtfelder prüfen.', 'ignitec' ), $errors );
+	}
+
+	// Mail an office@ignitec.at
+	$to      = get_option( 'ignitec_inquiry_to', 'office@ignitec.at' );
+	$site    = wp_parse_url( home_url(), PHP_URL_HOST );
+	$subject = sprintf( '[Ignitec] Anfrage von %s (%s)', $in['firma'], $in['nachname'] );
+
+	$lines = [
+		sprintf( 'Eingang:    %s', current_time( 'd.m.Y H:i' ) ),
+		sprintf( 'Absender:   %s %s %s', $in['anrede'], $in['vorname'], $in['nachname'] ),
+		sprintf( 'Firma:      %s', $in['firma'] ),
+		sprintf( 'E-Mail:     %s', $in['email'] ),
+		sprintf( 'Telefon:    %s', $in['telefon'] ),
+		'',
+		'--- Projekt ---',
+		sprintf( 'Einsatzbereich:   %s', $in['einsatzbereich'] ),
+		sprintf( 'Schutzvolumen:    %s m³', $in['schutzvolumen'] ),
+		sprintf( 'Temp.-Bereich:    %s', $in['temp_bereich'] ),
+		sprintf( 'Auslöse-Art:      %s', $in['ausloesung'] ),
+		sprintf( 'Zeitrahmen:       %s', $in['zeitrahmen'] ),
+		'',
+		'--- Nachricht ---',
+		$in['nachricht'],
+		'',
+		sprintf( 'Newsletter-Opt-In: %s', $in['newsletter'] ? 'Ja' : 'Nein' ),
+		sprintf( 'Einwilligung:      %s', $in['consent'] ? 'Ja' : 'Nein' ),
+		sprintf( 'Quelle:            %s', home_url( add_query_arg( [], $_SERVER['REQUEST_URI'] ?? '' ) ) ),
+	];
+
+	$body    = implode( "\n", $lines );
+	$headers = [
+		'Content-Type: text/plain; charset=UTF-8',
+		sprintf( 'From: Ignitec Web <noreply@%s>', $site ),
+		sprintf( 'Reply-To: %s <%s>', trim( $in['vorname'] . ' ' . $in['nachname'] ), $in['email'] ),
+	];
+	wp_mail( $to, $subject, $body, $headers );
+
+	// Auto-Reply
+	$auto_subject = __( 'Ihre Anfrage bei Ignitec — wir haben Sie erhalten', 'ignitec' );
+	$auto_body    = sprintf(
+		"Guten Tag %s,\n\n"
+		. "vielen Dank für Ihre Anfrage. Wir melden uns im Regelfall innerhalb von 4 Stunden zurück und übermitteln Ihnen das Auslegungsdokument binnen 48 h (Werktage).\n\n"
+		. "Ignitec GmbH\nMichael-Hainisch-Straße 8\n2493 Lichtenwörth\noffice@ignitec.at\n\n"
+		. "— diese Nachricht wurde automatisch erstellt.",
+		$in['nachname']
+	);
+	wp_mail(
+		$in['email'],
+		$auto_subject,
+		$auto_body,
+		[
+			'Content-Type: text/plain; charset=UTF-8',
+			sprintf( 'From: Ignitec <%s>', $to ),
+		]
+	);
+
+	// Brevo-Opt-In (optional)
+	if ( $in['newsletter'] ) {
+		ignitec_brevo_subscribe( $in['email'], [
+			'VORNAME'  => $in['vorname'],
+			'NACHNAME' => $in['nachname'],
+			'FIRMA'    => $in['firma'],
+		] );
+	}
+
+	$respond( true, __( 'Vielen Dank. Wir melden uns innerhalb von 4 Stunden.', 'ignitec' ) );
+}
+
+
+/* =========================================================
+ * 10 · BREVO · NEWSLETTER-API (OPTIONAL)
+ *
+ * Nutzt entweder:
+ * - Konstante IGNITEC_BREVO_API_KEY + IGNITEC_BREVO_LIST_ID in wp-config.php
+ * - Oder wp_option 'ignitec_brevo_api_key' + 'ignitec_brevo_list_id'
+ * Ohne gesetzten API-Key wird silent übersprungen.
+ * ========================================================= */
+
+function ignitec_brevo_subscribe( $email, $attrs = [] ) {
+
+	$api_key = defined( 'IGNITEC_BREVO_API_KEY' )
+		? IGNITEC_BREVO_API_KEY
+		: get_option( 'ignitec_brevo_api_key', '' );
+	$list_id = defined( 'IGNITEC_BREVO_LIST_ID' )
+		? (int) IGNITEC_BREVO_LIST_ID
+		: (int) get_option( 'ignitec_brevo_list_id', 0 );
+
+	if ( ! $api_key || ! $list_id || ! is_email( $email ) ) {
+		return false;
+	}
+
+	$payload = [
+		'email'           => $email,
+		'attributes'      => array_filter( $attrs ),
+		'listIds'         => [ $list_id ],
+		'updateEnabled'   => true,
+	];
+
+	$response = wp_remote_post( 'https://api.brevo.com/v3/contacts', [
+		'timeout' => 10,
+		'headers' => [
+			'Accept'       => 'application/json',
+			'Content-Type' => 'application/json',
+			'api-key'      => $api_key,
+		],
+		'body'    => wp_json_encode( $payload ),
+	] );
+
+	if ( is_wp_error( $response ) ) { return false; }
+	$code = (int) wp_remote_retrieve_response_code( $response );
+	return $code >= 200 && $code < 300;
+}
+
+
+/* =========================================================
+ * 11 · ADMIN-SEITE · IGNITEC-EINSTELLUNGEN
+ *
+ * Minimales Settings-Panel (ohne Plugin). Hier werden
+ * Brevo-API-Key + List-ID gepflegt, falls nicht via wp-config.
+ * ========================================================= */
+
+add_action( 'admin_menu', function () {
+	add_options_page(
+		__( 'Ignitec', 'ignitec' ),
+		__( 'Ignitec', 'ignitec' ),
+		'manage_options',
+		'ignitec-settings',
+		'ignitec_settings_page'
+	);
+} );
+
+add_action( 'admin_init', function () {
+	register_setting( 'ignitec_settings', 'ignitec_brevo_api_key',  [ 'sanitize_callback' => 'sanitize_text_field' ] );
+	register_setting( 'ignitec_settings', 'ignitec_brevo_list_id',  [ 'sanitize_callback' => 'absint' ] );
+	register_setting( 'ignitec_settings', 'ignitec_inquiry_to',     [ 'sanitize_callback' => 'sanitize_email' ] );
+} );
+
+function ignitec_settings_page() {
+	if ( ! current_user_can( 'manage_options' ) ) { return; }
+	?>
+	<div class="wrap">
+		<h1>Ignitec Einstellungen</h1>
+		<form method="post" action="options.php">
+			<?php settings_fields( 'ignitec_settings' ); ?>
+			<table class="form-table">
+				<tr>
+					<th scope="row"><label for="ignitec_inquiry_to">Anfrage-Empfänger</label></th>
+					<td>
+						<input type="email" name="ignitec_inquiry_to" id="ignitec_inquiry_to"
+							value="<?php echo esc_attr( get_option( 'ignitec_inquiry_to', 'office@ignitec.at' ) ); ?>"
+							class="regular-text">
+						<p class="description">E-Mail-Adresse für eingehende Anfragen aus dem Kontaktformular.</p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="ignitec_brevo_api_key">Brevo API-Key</label></th>
+					<td>
+						<input type="text" name="ignitec_brevo_api_key" id="ignitec_brevo_api_key"
+							value="<?php echo esc_attr( get_option( 'ignitec_brevo_api_key' ) ); ?>"
+							class="regular-text code"
+							autocomplete="off">
+						<p class="description">Aus Brevo → SMTP &amp; API → API Keys. Startet mit <code>xkeysib-…</code></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="ignitec_brevo_list_id">Brevo List-ID</label></th>
+					<td>
+						<input type="number" name="ignitec_brevo_list_id" id="ignitec_brevo_list_id"
+							value="<?php echo esc_attr( get_option( 'ignitec_brevo_list_id' ) ); ?>"
+							class="small-text">
+						<p class="description">Numerische ID der Brevo-Kontaktliste für Newsletter-Opt-Ins.</p>
+					</td>
+				</tr>
+			</table>
+			<?php submit_button(); ?>
+		</form>
+		<hr>
+		<p><strong>Alternativ:</strong> Werte via <code>wp-config.php</code> setzen:</p>
+		<pre>define( 'IGNITEC_BREVO_API_KEY', 'xkeysib-…' );
+define( 'IGNITEC_BREVO_LIST_ID', 3 );</pre>
+	</div>
+	<?php
+}

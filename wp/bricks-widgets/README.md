@@ -17,12 +17,13 @@ Sammlung aller Bricks-Code-Widget-Blöcke zum Copy-Paste. Reihenfolge entspricht
 | 3.5 | `step-3-5-technology-usp.md` | Technologie-USP mit 4 Argumenten + Visual | ✅ Geliefert |
 | 3.6 | `step-3-6-process.md` | 4-Step-Prozess + HowTo-JSON-LD | ✅ Geliefert |
 | 3.7 | `step-3-7-faq.md` | 6 FAQ + FAQPage-JSON-LD | ✅ Geliefert |
-| 3.8 | `step-3-8-contact-teaser.md` | Kontakt-Teaser mit 48-h-Versprechen | ✅ Geliefert |
+| 3.8 | `step-3-8-contact-teaser.md` | Kontakt-Teaser mit kompaktem Formular | ✅ Geliefert |
+| Form | `widget-contact-form.md` | Wiederverwendbares Kontaktformular (Bricks-nativ, kein Plugin) | ✅ Geliefert |
+| 6 | `step-6-applications.md` | Anwendungs-CPT + Single + Archiv-Template | ✅ Geliefert |
+| 7 | `step-7-contact.md` | Kontakt-Seite (Hero + Form + OSM-Map + LocalBusiness-JSON-LD) | ✅ Geliefert |
+| 8 | `step-8-legal.md` | Impressum, Datenschutz, AGB (Templates + Musterinhalte) | ✅ Geliefert |
 | 4 | _pending_ | Shop-Archiv (Bricks Filter-Elemente) | 🔜 Nach Homepage-Abnahme |
 | 5 | _pending_ | Produkt-Single mit dynamischer Spec-Table | 🔜 Nach Homepage-Abnahme |
-| 6 | _pending_ | Anwendungs-Seiten (CPT **oder** WC-Kategorie-Pages) | ❓ Entscheidung offen |
-| 7 | _pending_ | Kontakt-Seite (Formular-Plugin offen) | ❓ Entscheidung offen |
-| 8 | _pending_ | Rechtstexte (Impressum, Datenschutz, AGB, Widerruf) | 🔜 Nach Abnahme |
 
 ## Einbau-Workflow pro Widget
 
@@ -42,8 +43,23 @@ Jedes Widget ist **komplett autark** — HTML, CSS und JS inline. Änderungen:
 
 Keine Widget-Änderung bricht ein anderes — die CSS-Klassen sind sektionsgenau geprefixt (`.ign-hero__…`, `.ign-faq__…`, …).
 
-## Offene Entscheidungen (vor STEP 6/7)
+## Entscheidungen (fixiert)
 
-1. **Kontaktformular-Plugin:** Contact Form 7 (free) oder Fluent Forms Free?
-2. **Anwendungs-Seiten:** Custom Post Type `ignitec_application` oder erweiterte WooCommerce-Kategorie-Pages?
-3. **Newsletter / Leadmagnet:** Brevo, MailPoet (free) — oder gar nicht?
+| Bereich | Entscheidung | Umsetzung |
+|---|---|---|
+| Kontaktformular | **Bricks Native Form** (kein Plugin) | `widget-contact-form.md` + `functions.php` Abschnitt 9 |
+| Anwendungs-Seiten | **CPT `ignitec_application`** | `functions.php` Abschnitt 8 + `step-6-applications.md` |
+| Newsletter | **Brevo (free)** | `functions.php` Abschnitt 10 (API-Integration) + Admin-Settings Abschnitt 11 |
+
+## Brevo-Setup
+
+Unter **Einstellungen → Ignitec** im WP-Admin:
+- Anfrage-Empfänger: `office@ignitec.at`
+- Brevo API-Key: aus Brevo-Account → SMTP & API → API Keys
+- Brevo List-ID: ID der Newsletter-Kontaktliste
+
+Alternativ via `wp-config.php`:
+```php
+define( 'IGNITEC_BREVO_API_KEY', 'xkeysib-…' );
+define( 'IGNITEC_BREVO_LIST_ID', 3 );
+```

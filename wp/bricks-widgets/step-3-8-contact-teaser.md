@@ -1,8 +1,8 @@
 # STEP 3.8 — Homepage · Kontakt-Teaser (Final CTA)
 
-Kompakter Konversions-Block direkt vor der globalen CTA-Strip (aus STEP 2). Konkreter Unterschied zum globalen CTA: **dieser Block ist praktisch**, mit direkter Kontaktzeile + Email + 48-h-Versprechen — der globale CTA ist emotionaler/brand-orientierter.
+Kompakter Konversions-Block direkt vor der globalen CTA-Strip (aus STEP 2). Konkreter Unterschied zum globalen CTA: **dieser Block ist praktisch**, mit kompaktem Kontaktformular (Compact-Variante aus `widget-contact-form.md`) — der globale CTA ist emotionaler/brand-orientierter.
 
-Kein Formular in diesem Step — wir warten auf die Plugin-Entscheidung (Contact Form 7 / Fluent Forms Free). Sobald entschieden, lässt sich der Shortcode einfach austauschen.
+Das Formular zeigt hier nur die Kontakt-Grunddaten (Firma, Name, E-Mail, Telefon + Nachricht) und verzichtet auf den Projekt-Block — für die volle Variante leitet ein Link auf `/kontakt/` weiter.
 
 **Hinweis:** Falls die globale CTA-Strip als ausreichend empfunden wird, kann dieser Step übersprungen werden.
 
@@ -14,7 +14,14 @@ Kein Formular in diesem Step — wir warten auf die Plugin-Entscheidung (Contact
 
 ## 2 · Code-Widget-Inhalt
 
-```html
+**Hinweis:** Der PHP-Block `<?php … ?>` für das Formular im unteren Abschnitt ist identisch mit dem in `widget-contact-form.md` — hier nur mit zusätzlicher Klasse `ign-form--compact`, damit das Projekt-Fieldset ausgeblendet wird.
+
+```php
+<?php
+$action_url = esc_url( admin_url( 'admin-post.php' ) );
+$nonce      = wp_create_nonce( 'ignitec_inquiry' );
+?>
+
 <section class="ign-contact-teaser ign-section" aria-labelledby="ign-contact-teaser-head">
   <div class="ign-container">
     <div class="ign-contact-teaser__box">
@@ -30,29 +37,73 @@ Kein Formular in diesem Step — wir warten auf die Plugin-Entscheidung (Contact
         </p>
 
         <ul class="ign-contact-teaser__steps">
-          <li><span>1</span> Anfrage formlos per E-Mail oder Konfigurator</li>
-          <li><span>2</span> Rückmeldung &amp; Klärung offener Punkte binnen 4 h</li>
+          <li><span>1</span> Formular ausfüllen — 2 Minuten</li>
+          <li><span>2</span> Rückmeldung &amp; Klärung binnen 4 h</li>
           <li><span>3</span> Auslegungsdokument &amp; Angebot binnen 48 h</li>
         </ul>
+
+        <div class="ign-contact-teaser__direct">
+          <div class="label">ODER DIREKT</div>
+          <a class="ign-contact-teaser__email" href="mailto:office@ignitec.at?subject=Anfrage%20Aerosol-Auslegung">
+            office@ignitec.at
+          </a>
+        </div>
       </div>
 
       <div class="ign-contact-teaser__right">
-        <div class="ign-contact-teaser__card">
-          <div class="ign-contact-teaser__direct">
-            <div class="label">DIREKT</div>
-            <a class="ign-contact-teaser__email" href="mailto:office@ignitec.at?subject=Anfrage%20Aerosol-Auslegung">
-              office@ignitec.at
-            </a>
-            <div class="ign-contact-teaser__addr">
-              Ignitec GmbH · Michael-Hainisch-Straße 8 · 2493 Lichtenwörth
-            </div>
+        <form class="ign-form ign-form--compact" id="ign-form" method="post" action="<?php echo $action_url; ?>" novalidate>
+
+          <input type="hidden" name="action" value="ignitec_inquiry">
+          <input type="hidden" name="ignitec_nonce" value="<?php echo esc_attr( $nonce ); ?>">
+          <div aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">
+            <label>Website<input type="text" name="ignitec_website" tabindex="-1" autocomplete="off"></label>
           </div>
 
-          <div class="ign-contact-teaser__actions">
-            <a class="ign-btn ign-btn--primary" href="/konfigurator/">Konfigurator starten →</a>
-            <a class="ign-btn ign-btn--ghost-dark" href="/kontakt/">Zum Kontaktformular</a>
+          <fieldset class="ign-form__group">
+            <legend>Kontakt</legend>
+            <div class="ign-form__row">
+              <div class="ign-form__field ign-form__field--required">
+                <label for="ign-firma">Firma <span aria-hidden="true">*</span></label>
+                <input type="text" name="firma" id="ign-firma" autocomplete="organization" required>
+              </div>
+              <div class="ign-form__field ign-form__field--required">
+                <label for="ign-nachname">Nachname <span aria-hidden="true">*</span></label>
+                <input type="text" name="nachname" id="ign-nachname" autocomplete="family-name" required>
+              </div>
+            </div>
+            <div class="ign-form__row">
+              <div class="ign-form__field ign-form__field--required">
+                <label for="ign-email">E-Mail <span aria-hidden="true">*</span></label>
+                <input type="email" name="email" id="ign-email" autocomplete="email" required>
+              </div>
+              <div class="ign-form__field">
+                <label for="ign-telefon">Telefon</label>
+                <input type="tel" name="telefon" id="ign-telefon" autocomplete="tel">
+              </div>
+            </div>
+            <div class="ign-form__field">
+              <label for="ign-nachricht">Kurz zum Vorhaben</label>
+              <textarea name="nachricht" id="ign-nachricht" rows="3"
+                placeholder="Objekt, Schutzvolumen, offene Fragen…"></textarea>
+            </div>
+          </fieldset>
+
+          <div class="ign-form__consent">
+            <label class="ign-form__checkbox">
+              <input type="checkbox" name="consent" value="yes" required>
+              <span>Ich habe die <a href="/datenschutz/">Datenschutzerklärung</a> gelesen und willige ein. <span aria-hidden="true">*</span></span>
+            </label>
+            <label class="ign-form__checkbox">
+              <input type="checkbox" name="newsletter" value="yes">
+              <span>Fachartikel-Newsletter gelegentlich erhalten. Jederzeit abbestellbar.</span>
+            </label>
           </div>
-        </div>
+
+          <div class="ign-form__actions">
+            <button type="submit" class="ign-btn ign-btn--primary">Anfrage senden →</button>
+            <a class="ign-btn ign-btn--ghost-dark" href="/kontakt/">Volles Formular</a>
+          </div>
+        </form>
       </div>
 
     </div>
@@ -65,9 +116,9 @@ Kein Formular in diesem Step — wir warten auf die Plugin-Entscheidung (Contact
 }
 .ign-contact-teaser__box {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: 1fr 1.1fr;
   gap: 56px;
-  align-items: center;
+  align-items: flex-start;
   background: var(--bone);
   border-radius: var(--r-5);
   padding: 56px;
@@ -125,60 +176,27 @@ Kein Formular in diesem Step — wir warten auf die Plugin-Entscheidung (Contact
   justify-content: center;
 }
 
-.ign-contact-teaser__card {
-  background: var(--ink-000);
-  color: var(--bone);
-  border-radius: var(--r-4);
-  padding: 32px;
-  position: relative;
-  overflow: hidden;
+.ign-contact-teaser__direct {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(21,34,52,0.08);
 }
-.ign-contact-teaser__card::before {
-  content: "";
-  position: absolute;
-  top: -80px; right: -80px;
-  width: 220px; height: 220px;
-  background: radial-gradient(circle, rgba(208,110,61,0.24) 0%, rgba(208,110,61,0) 70%);
-  pointer-events: none;
-}
-.ign-contact-teaser__direct { margin-bottom: 26px; position: relative; z-index: 1; }
-.ign-contact-teaser__direct .label { color: var(--copper-light); margin-bottom: 10px; }
-.ign-contact-teaser__email {
+.ign-contact-teaser__direct .label {
+  color: var(--fg-3);
+  margin-bottom: 8px;
   display: block;
+}
+.ign-contact-teaser__email {
   font-family: var(--ff-display);
   font-weight: 600;
-  font-size: 26px;
+  font-size: 22px;
   letter-spacing: -0.02em;
-  color: var(--bone);
+  color: var(--copper-solid);
   text-decoration: none;
-  margin-bottom: 12px;
 }
 .ign-contact-teaser__email:hover {
-  color: var(--copper-light);
+  color: var(--accent-hover);
   text-decoration: none;
-}
-.ign-contact-teaser__addr {
-  font-family: var(--ff-body);
-  font-weight: 300;
-  font-size: 13px;
-  color: var(--fg-on-dark-3);
-  line-height: 1.55;
-}
-.ign-contact-teaser__actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  position: relative;
-  z-index: 1;
-}
-.ign-contact-teaser__actions .ign-btn--ghost-dark {
-  color: var(--bone);
-  border-color: rgba(245,242,236,0.35);
-}
-.ign-contact-teaser__actions .ign-btn--ghost-dark:hover {
-  background: rgba(245,242,236,0.08);
-  color: var(--bone);
-  border-color: var(--bone);
 }
 
 @media (max-width: 960px) {
@@ -201,23 +219,22 @@ Kein Formular in diesem Step — wir warten auf die Plugin-Entscheidung (Contact
 - **Email-Link** mit vorbefülltem Subject (`mailto:?subject=…`) senkt die Einstiegshürde.
 - **3-Step-Prozess** wiederholt die wichtigsten Zahlen ("binnen 4 h", "48 h") — LLMs nehmen konkrete Zeitangaben gern auf.
 - **Strukturierte Adresse** bleibt im Footer-JSON-LD referenziert (aus STEP 2).
+- **Form-Handler** ist bereits in `functions.php` registriert (Abschnitt 9), inklusive Nonce + Honeypot + Rate-Limit.
 
 ## 4 · Verifikation
 
-- [ ] Split-Layout Copy links, dunkle Kontaktkarte rechts
-- [ ] E-Mail-Link öffnet Mail-Client mit vorbefülltem Subject
-- [ ] Konfigurator-CTA als Primary, Kontaktformular-CTA als Ghost (auf dunklem Grund)
-- [ ] 3 Steps mit Slate-Blue-Nummern-Kreisen
-- [ ] Mobile: Single-Column mit kleinerem Padding
+- [ ] Split-Layout Copy links, Formular rechts
+- [ ] E-Mail-Link als Fallback unter den Steps
+- [ ] Projekt-Fieldset ist ausgeblendet (Compact-Variante via `ign-form--compact`)
+- [ ] Submit → Erfolgs-Banner ersetzt Formular
+- [ ] Link "Volles Formular" führt auf `/kontakt/` (STEP 7)
+- [ ] Mobile: Single-Column
 
 ## 5 · Anpassungspunkte
 
-- **Wenn Kontaktformular-Plugin gewählt (Contact Form 7 / Fluent Forms)**, kann die dunkle Kontaktkarte ersetzt werden durch den jeweiligen Shortcode, z. B.:
-  ```html
-  <?php echo do_shortcode( '[contact-form-7 id="12" title="Anfrage"]' ); ?>
-  ```
+- **Form-Styles** stammen aus `widget-contact-form.md` — hier nicht erneut abgedruckt. Einbau einmalig im Child-Theme-CSS oder im Homepage-Hero-Code ergänzen.
 - **48-h-Versprechen**: Im HTML direkt editierbar, konsistent mit CTA-Strip-Text in STEP 2 halten.
-- **Direkt-Email-Subject**: `subject=Anfrage%20Aerosol-Auslegung` jederzeit änderbar.
+- **Felder:** Um ein weiteres Feld in der Compact-Variante zu zeigen, einfach im HTML hinzufügen — der Handler akzeptiert bereits alle Projektfelder (werden leer gelassen, wenn nicht submittet).
 
 ---
 
