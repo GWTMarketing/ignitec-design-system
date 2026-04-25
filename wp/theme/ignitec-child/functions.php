@@ -62,7 +62,7 @@ function ignitec_register_global_attributes() {
 	if ( ! function_exists( 'wc_create_attribute' ) ) { return; }
 
 	$attributes = [
-		'serie'          => [ 'Serie',          [ 'ST-30G','ST-60G','ST-100G','ST-150G','ST-250G','ST-500G' ] ],
+		'serie'          => [ 'Serie',          [ 'ST-30','ST-60','ST-100','ST-150','ST-250','ST-500','ST-1000','ST-2000' ] ],
 		'einsatzbereich' => [ 'Einsatzbereich', [ 'Schaltschrank','BESS','Maschinenraum','Serverraum','Fahrzeug','Industrie' ] ],
 		'ausloesung'     => [ 'Auslösung',      [ 'Thermisch','Elektrisch','Manuell','Dual' ] ],
 		'montage'        => [ 'Montageart',     [ 'Wand','Decke','Schrankboden','19-Zoll-Rack' ] ],

@@ -1,168 +1,174 @@
-# STEP 3.4 — Homepage · Anwendungen
+# STEP 3.4 — Homepage · Anwendungen (Dark · 6-Spalten-Grid)
 
-4 Use-Case-Kacheln: Schaltschrank, BESS / Battery Rack, Maschinenraum, Serverraum. Jede Kachel verlinkt auf die Shop-Archivseite gefiltert nach `pa_einsatzbereich` — dynamisch mit den Attribut-Terms aus STEP 0.
+Vollflächige Sektion auf Ink-Carrier mit 6 Anwendungs-Zellen. Section-Head split (Eyebrow + H2 links, Lead rechts). Jede Zelle: nummerische Kennung, Anwendungs-Name, Detail-Tag.
 
-**SEO-Nutzen:** Deep-Linking in das Produkt-Archiv mit vorausgewähltem Filter → bessere interne Verlinkung, thematische Relevanz-Cluster für Google.
+**Quelle:** Mockup `home.html` — Section "Dort, wo Wasser keine Option ist."
 
 ---
 
 ## 1 · Platzierung
 
-**Bricks → Pages → Startseite** — **4. Section** unter Produkt-Highlights. Container Full-Width, darin **1 Code-Element** (Execute code ✅).
+**Bricks → Pages → Startseite** — **4. Section** unter Produkt-Teaser. Container Full-Width, **1 Code-Element**.
 
 ## 2 · Code-Widget-Inhalt
 
-```php
-<?php
-/**
- * IGNITEC · Anwendungen (Application Strip)
- * 4 Use-Case-Kacheln → verlinkt auf Shop-Archiv mit pa_einsatzbereich-Filter.
- */
-
-$apps = [
-	[
-		'term' => 'Schaltschrank',
-		'slug' => 'schaltschrank',
-		'desc' => '0,3 – 2,5 m³ · thermisch oder elektrisch ausgelöst',
-	],
-	[
-		'term' => 'BESS',
-		'slug' => 'bess',
-		'desc' => 'Thermal Runaway im Battery-Rack früh unterdrücken',
-	],
-	[
-		'term' => 'Maschinenraum',
-		'slug' => 'maschinenraum',
-		'desc' => 'CNC, Hydraulik, Blockheizkraftwerk',
-	],
-	[
-		'term' => 'Serverraum',
-		'slug' => 'serverraum',
-		'desc' => 'Rückstandsarm, keine Ausgasung',
-	],
-];
-
-$archive_base = get_post_type_archive_link( 'product' );
-?>
-
+```html
 <section class="ign-apps ign-section" aria-labelledby="ign-apps-head">
   <div class="ign-container">
-    <span class="eyebrow">ANWENDUNGEN</span>
-    <h2 id="ign-apps-head" class="ign-apps__h2">
-      Wo Aerosol die richtige Antwort ist.
-    </h2>
-    <p class="ign-apps__lead">
-      Kondensiertes Aerosol schützt geschlossene oder weitgehend geschlossene Volumina —
-      dort, wo Gas, Pulver oder Wasser Sekundärschäden verursachen würden.
-    </p>
+
+    <div class="ign-apps__head">
+      <div>
+        <span class="eyebrow ign-apps__eyebrow">Einsatzfelder</span>
+        <h2 id="ign-apps-head" class="ign-apps__h2">
+          Dort, wo Wasser<br>
+          keine Option ist.
+        </h2>
+      </div>
+      <p class="ign-apps__lead">
+        Aerosol-Löschtechnik ist überall dort im Einsatz, wo Strom, Mechanik
+        oder sensible Elektronik ein klassisches Löschmittel ausschließen.
+      </p>
+    </div>
 
     <div class="ign-apps__grid">
-      <?php foreach ( $apps as $app ) :
-        $url = add_query_arg( 'filter_einsatzbereich', $app['slug'], $archive_base );
-      ?>
-        <a class="ign-app-card" href="<?php echo esc_url( $url ); ?>">
-          <div class="ign-app-card__mark" aria-hidden="true"></div>
-          <div class="ign-app-card__body">
-            <div class="ign-app-card__title"><?php echo esc_html( $app['term'] ); ?></div>
-            <div class="ign-app-card__desc"><?php echo esc_html( $app['desc'] ); ?></div>
-          </div>
-          <div class="ign-app-card__arrow" aria-hidden="true">→</div>
-        </a>
-      <?php endforeach; ?>
+      <a class="ign-apps__cell" href="/anwendungen/bess/">
+        <div class="ign-apps__no">01</div>
+        <div>
+          <div class="ign-apps__name">BESS &amp;<br>Batterie­speicher</div>
+          <div class="ign-apps__dx">Thermal Runaway, Li-Ion-Racks</div>
+        </div>
+      </a>
+      <a class="ign-apps__cell" href="/anwendungen/schaltanlagen/">
+        <div class="ign-apps__no">02</div>
+        <div>
+          <div class="ign-apps__name">Schalt­anlagen &amp;<br>Trafostationen</div>
+          <div class="ign-apps__dx">NSHV, MSHV, Umspannwerke</div>
+        </div>
+      </a>
+      <a class="ign-apps__cell" href="/anwendungen/serverraum/">
+        <div class="ign-apps__no">03</div>
+        <div>
+          <div class="ign-apps__name">Daten­zentren &amp;<br>Serverräume</div>
+          <div class="ign-apps__dx">Rack-Level, Raumflutung</div>
+        </div>
+      </a>
+      <a class="ign-apps__cell" href="/anwendungen/maschinenraum/">
+        <div class="ign-apps__no">04</div>
+        <div>
+          <div class="ign-apps__name">Maschinen &amp;<br>CNC-Zentren</div>
+          <div class="ign-apps__dx">Kapselung, Öl- und Spänebrände</div>
+        </div>
+      </a>
+      <a class="ign-apps__cell" href="/anwendungen/fahrzeug/">
+        <div class="ign-apps__no">05</div>
+        <div>
+          <div class="ign-apps__name">Busse, Bahn &amp;<br>Sonder­fahrzeuge</div>
+          <div class="ign-apps__dx">Motorraum, Batteriekasten</div>
+        </div>
+      </a>
+      <a class="ign-apps__cell" href="/anwendungen/windkraft/">
+        <div class="ign-apps__no">06</div>
+        <div>
+          <div class="ign-apps__name">Wind­kraft &amp;<br>Anlagentechnik</div>
+          <div class="ign-apps__dx">Gondel, Umrichterkabine</div>
+        </div>
+      </a>
     </div>
   </div>
 </section>
 
 <style>
 .ign-apps {
-  background: var(--bone-200);
+  background: var(--ink-000);
+  color: var(--bone);
+  padding: 112px 28px;
 }
+.ign-apps__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(245,242,236,0.12);
+  margin-bottom: 48px;
+}
+.ign-apps__eyebrow { color: var(--copper-light); }
 .ign-apps__h2 {
   font-family: var(--ff-display);
   font-weight: 500;
-  font-size: clamp(32px, 3.6vw, 40px);
+  font-size: clamp(32px, 3.6vw, 52px);
   line-height: 1.03;
-  letter-spacing: -0.04em;
-  color: var(--slateblue);
-  margin: 10px 0 12px;
+  letter-spacing: -0.035em;
+  color: var(--bone);
+  margin: 10px 0 0;
+  max-width: 18ch;
 }
 .ign-apps__lead {
   font-family: var(--ff-body);
   font-weight: 300;
   font-size: 17px;
-  color: var(--fg-2);
-  max-width: 62ch;
-  margin: 0 0 32px;
+  line-height: 1.55;
+  color: rgba(245,242,236,0.72);
+  max-width: 38ch;
+  margin: 0;
 }
 
 .ign-apps__grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1px;
+  background: rgba(245,242,236,0.08);
+  border: 1px solid rgba(245,242,236,0.08);
 }
-.ign-app-card {
-  background: var(--bone);
-  border-radius: var(--r-4);
-  padding: 22px;
+.ign-apps__cell {
+  background: var(--ink-100);
+  padding: 32px 22px;
   min-height: 180px;
-  border: 1px solid rgba(21,34,52,0.06);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  color: inherit;
   text-decoration: none;
-  position: relative;
-  transition: transform var(--dur-fast) var(--ease-standard),
-              box-shadow var(--dur-base) var(--ease-standard),
-              border-color var(--dur-base) var(--ease-standard);
+  color: inherit;
+  transition: background var(--dur-base) var(--ease-standard);
 }
-.ign-app-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-3);
-  border-color: rgba(121,57,7,0.20);
+.ign-apps__cell:hover {
+  background: var(--ink-200);
   text-decoration: none;
   color: inherit;
 }
-.ign-app-card__mark {
-  width: 32px; height: 32px;
-  border-radius: var(--r-2);
-  background: var(--gradient-copper);
+.ign-apps__no {
+  font-family: var(--ff-mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: rgba(244,169,98,0.75);
 }
-.ign-app-card__title {
+.ign-apps__name {
   font-family: var(--ff-display);
   font-weight: 600;
-  font-size: 19px;
-  letter-spacing: -0.02em;
-  color: var(--slateblue);
+  font-size: 17px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--bone);
 }
-.ign-app-card__desc {
+.ign-apps__dx {
   font-family: var(--ff-body);
   font-weight: 300;
-  font-size: 13px;
-  line-height: 1.55;
-  color: var(--fg-2);
-  margin-top: 6px;
-}
-.ign-app-card__arrow {
-  position: absolute;
-  right: 18px; top: 18px;
-  font-family: var(--ff-display);
-  font-size: 18px;
-  color: var(--copper-solid);
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity var(--dur-base) var(--ease-standard),
-              transform var(--dur-base) var(--ease-standard);
-}
-.ign-app-card:hover .ign-app-card__arrow {
-  opacity: 1;
-  transform: translateX(0);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: rgba(245,242,236,0.55);
+  margin-top: 8px;
 }
 
-@media (max-width: 960px) {
-  .ign-apps__grid { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 1080px) {
+  .ign-apps__grid { grid-template-columns: repeat(3, 1fr); }
 }
-@media (max-width: 560px) {
+@media (max-width: 720px) {
+  .ign-apps__head { flex-direction: column; align-items: flex-start; gap: 24px; }
+  .ign-apps__grid { grid-template-columns: repeat(2, 1fr); }
+  .ign-apps { padding: 80px 24px; }
+}
+@media (max-width: 480px) {
   .ign-apps__grid { grid-template-columns: 1fr; }
 }
 </style>
@@ -170,24 +176,16 @@ $archive_base = get_post_type_archive_link( 'product' );
 
 ---
 
-## 3 · SEO/GEO-Notiz
+## 3 · Verifikation
 
-- **Interne Verlinkung:** Jede Karte verlinkt auf den gefilterten Shop-Archiv (`?filter_einsatzbereich=bess` etc.). Perfekt für Topic-Cluster.
-- **Filter-Parameter** greift, sobald STEP 4 (Shop-Archiv mit Bricks-Filter-Elementen) live ist — bis dahin zeigt der Link die volle Produktliste.
-- **GEO-freundlich:** Kurze, konkrete Use-Case-Beschreibungen — LLMs können sie direkt in "Für welche Bereiche eignet sich ein Aerosol-Löschsystem?"-Antworten nutzen.
+- [ ] Volle Ink-000-Bühne, dunkler Carrier
+- [ ] 6 Zellen Desktop, 3 Tablet, 2 Mobile-XL, 1 Mobile-S
+- [ ] Hairline-Trenngrid via 1px Background-Color
+- [ ] Hover: Zelle wird heller (Ink-100 → Ink-200)
+- [ ] Klick führt auf `/anwendungen/<slug>/` (CPT-Single)
 
-## 4 · Verifikation
+## 4 · Anpassungspunkte
 
-- [ ] 4 Kacheln Desktop, 2 Tablet, 1 Mobile
-- [ ] Copper-Gradient-Quadrat oben links
-- [ ] Hover: Karte hebt sich leicht, Pfeil → erscheint rechts oben
-- [ ] Klick geht auf `/produkt-kategorie/` mit Query-String `?filter_einsatzbereich=…`
-
-## 5 · Anpassungspunkte
-
-- **Use-Cases bearbeiten**: Im `$apps`-Array am Anfang des Blocks. Slug muss einem Term-Slug aus `pa_einsatzbereich` entsprechen.
-- **Alternative Routen**: Wenn STEP 6 als CPT `ignitec_application` umgesetzt wird, kann `$url` auf `get_permalink()` des jeweiligen CPT-Eintrags umgestellt werden.
-
----
-
-**Nach Verifikation → STEP 3.5 (Technologie-USP) freigeben.**
+- **Reihenfolge** der 6 Anwendungen — im HTML sortieren
+- **Slugs** in `href` müssen mit den CPT-Einträgen aus STEP 6 übereinstimmen
+- **Anzahl** kann auf 4 oder 8 angepasst werden (Grid-Template-Columns mit anpassen)

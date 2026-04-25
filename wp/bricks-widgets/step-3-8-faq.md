@@ -1,14 +1,14 @@
-# STEP 3.7 — Homepage · FAQ (mit FAQPage JSON-LD)
+# STEP 3.8 — Homepage · FAQ (optional · GEO-Erweiterung)
 
-6 Fragen/Antworten als native `<details>`-Accordions — serverseitig gerendert, ohne JS-Abhängigkeit, komplett mit `FAQPage`-Schema. Perfekt für **Google Rich Results** und **LLM-Zitate**.
+6 native `<details>`-Accordions mit FAQPage-JSON-LD. **Nicht** im Mockup `home.html` enthalten, aber **stark empfohlen** für Featured-Snippets und LLM-Zitate. Brand-konform: dezente Bone-Bühne, Short-Answer-First, native HTML-Elemente ohne JS.
 
-Jede Antwort folgt dem GEO-Muster: **Short Answer (1–2 Sätze) → Detail-Ebene**. LLMs nehmen bevorzugt den ersten Satz.
+**Position:** als letzte Section auf der Homepage, **unter** dem CTA aus STEP 3.7. Wer den CTA als Final-Section möchte, kann diesen Step überspringen.
 
 ---
 
 ## 1 · Platzierung
 
-**Bricks → Pages → Startseite** — **7. Section** unter Prozess. Container Full-Width, darin **1 Code-Element**.
+**Bricks → Pages → Startseite** — **8. Section** unter CTA. Container Full-Width, **1 Code-Element**.
 
 ## 2 · Code-Widget-Inhalt
 
@@ -27,28 +27,28 @@ $faqs = [
 	],
 	[
 		'q' => 'Für welche Einsatzbereiche eignet sich die Serie ST?',
-		'a_short' => 'Geschlossene oder weitgehend geschlossene Volumina von 0,3 bis 5 m³: Schaltschränke, BESS-Battery-Racks, Maschinenräume, Serverräume, Spezialfahrzeuge.',
-		'a_long' => 'Die Serie ST umfasst sechs Gerätegrößen (30 g bis 500 g Aerosolmasse). Die Gerätewahl folgt der Löschkonzentration 100 g/m³. Für Bereiche über 5 m³ werden mehrere Generatoren kombiniert. Nicht geeignet sind offene Freiflächen, flüssige Brände der Klasse B in Wannenform sowie reaktive Metallbrände (Klasse D).',
+		'a_short' => 'Geschlossene oder weitgehend geschlossene Volumina von 0,4 bis 27 m³: Schaltschränke, BESS-Battery-Racks, Maschinenräume, Serverräume, Spezialfahrzeuge, Windkraftgondeln.',
+		'a_long' => 'Die Serie ST umfasst acht Gerätegrößen (30 g bis 2,0 kg Aerosolmasse). Die Gerätewahl folgt der Auslegungs-Konzentration. Für Bereiche über 27 m³ werden mehrere Generatoren kombiniert. Nicht geeignet sind offene Freiflächen, flüssige Brände der Klasse B in Wannenform sowie reaktive Metallbrände (Klasse D).',
 	],
 	[
 		'q' => 'Wie lange dauert die Auslegung eines Schutzkonzepts?',
-		'a_short' => 'Im Regelfall innerhalb von 48 Stunden ab vollständiger Anfrage. Die Auslegung folgt CEN/TR 15276-1.',
-		'a_long' => 'Voraussetzung ist die Angabe des Schutzvolumens, der Betriebstemperaturen und der Auslöse-Art (thermisch / elektrisch / dual). Mit diesen Daten berechnen wir Aerosol-Menge, Gerätewahl und Positionierung. Die Dokumentation umfasst Berechnungsblatt, Installationsplan und Datenblätter. Bei komplexen Objekten (BESS-Großspeicher, Mehr-Zonen-Auslegung) kann die Vor-Ort-Begehung 1–3 zusätzliche Werktage dauern.',
+		'a_short' => 'Innerhalb von zwei Werktagen ab vollständiger Anfrage. Die Auslegung folgt CEN/TR 15276-1.',
+		'a_long' => 'Voraussetzung ist die Angabe des Schutzvolumens, der Betriebstemperaturen und der Auslöse-Art (thermisch, elektrisch, dual). Mit diesen Daten berechnen wir Aerosol-Menge, Gerätewahl und Positionierung. Die Dokumentation umfasst Berechnungsblatt, Installationsplan und Datenblätter. Bei komplexen Objekten (BESS-Großspeicher, Mehr-Zonen-Auslegung) kann die Vor-Ort-Begehung 1–3 zusätzliche Werktage dauern.',
 	],
 	[
 		'q' => 'Welche Wartungsarbeiten sind erforderlich?',
-		'a_short' => 'Jährliche Sichtprüfung der Thermoauslöser und Kontakte. Keine wiederkehrende Druckprüfung — der Generator enthält keinen Druckbehälter. Austausch nach 15 Jahren.',
-		'a_long' => 'Der Aufwand liegt bei rund 15 Minuten pro Gerät. Geprüft werden Sichtzustand des Gehäuses, Festigkeit der Kontakte, Funktion der thermischen Auslösung (Prüfpunkt am Glaskolben oder Meltlink) sowie die elektrische Continuity bei Dual-Auslösung. Wartung ist nicht zertifizierungspflichtig und kann durch geschultes Endkunden-Personal erfolgen.',
+		'a_short' => 'Jährliche Sichtprüfung der Thermoauslöser und Kontakte. Keine wiederkehrende Druckprüfung — der Generator enthält keinen Druckbehälter.',
+		'a_long' => 'Der Aufwand liegt bei rund 15 Minuten pro Gerät. Geprüft werden Sichtzustand des Gehäuses, Festigkeit der Kontakte, Funktion der thermischen Auslösung (Glaskolben oder Meltlink) sowie die elektrische Continuity bei Dual-Auslösung. Wartung ist nicht zertifizierungspflichtig und kann durch geschultes Endkunden-Personal erfolgen.',
 	],
 	[
 		'q' => 'Ist Aerosol-Löschen umweltverträglich?',
 		'a_short' => 'Ja. GWP 0 und ODP 0. Die Serie ST enthält keine fluorierten Treibhausgase, kein PFAS und keine Ozonabbaustoffe.',
-		'a_long' => 'Das Aerosol basiert auf Kaliumsalzen und organischen Bindern. Nach Freisetzung bleiben trockene, nicht-toxische Feststoff-Rückstände zurück, die mit einem Staubsauger entfernt werden. Die F-Gas-Verordnung (EU 517/2014 / 2024) ist nicht anwendbar, eine Meldepflicht besteht nicht. Im Gegensatz zu HFC-Gas-Anlagen gibt es keine Entsorgungs-Zusatzkosten am Lebensende.',
+		'a_long' => 'Das Aerosol basiert auf Kaliumsalzen und organischen Bindern. Nach Freisetzung bleiben trockene, nicht-toxische Feststoff-Rückstände zurück, die mit einem Staubsauger entfernt werden. Die F-Gas-Verordnung (EU 517/2014, Update 2024) ist nicht anwendbar, eine Meldepflicht besteht nicht. Im Gegensatz zu HFC-Gas-Anlagen gibt es keine Entsorgungs-Zusatzkosten am Lebensende.',
 	],
 	[
 		'q' => 'Welche Normen und Zulassungen erfüllt die Serie ST?',
-		'a_short' => 'CEN/TR 15276-1 (europäische Auslegungsregel für kondensierte Aerosole) und ISO 15779 (internationale Norm). VdS- und UL-Listungen auf Gerätebasis verfügbar.',
-		'a_long' => 'Die Auslegung nach CEN/TR 15276-1 ist in Deutschland, Österreich und weiteren EU-Staaten anerkannt. ISO 15779 bildet die internationale Basis. Für VdS-geforderte Objekte (z. B. Versicherungsvorgaben) bieten wir gelistete Varianten; UL-2775 wird für den US-Export angeboten. Maschinen-Richtlinie 2006/42/EG, EMV-Richtlinie und CE-Kennzeichnung sind bei allen Geräten erfüllt.',
+		'a_short' => 'CEN/TR 15276-1 (europäische Auslegungsregel für kondensierte Aerosole) und ISO 15779. Typprüfung nach EN 15276. VdS- und UL-Listungen verfügbar.',
+		'a_long' => 'Die Auslegung nach CEN/TR 15276-1 ist in Deutschland, Österreich und weiteren EU-Staaten anerkannt. ISO 15779 bildet die internationale Basis. Für VdS-geforderte Objekte (Versicherungsvorgaben) bieten wir gelistete Varianten; UL-2775 wird für den US-Export angeboten. Maschinen-Richtlinie 2006/42/EG, EMV-Richtlinie und CE-Kennzeichnung sind bei allen Geräten erfüllt.',
 	],
 ];
 
@@ -72,18 +72,16 @@ $schema = [
   <div class="ign-container ign-faq__inner">
 
     <div class="ign-faq__copy">
-      <span class="eyebrow">HÄUFIGE FRAGEN</span>
+      <span class="eyebrow">Häufige Fragen</span>
       <h2 id="ign-faq-head" class="ign-faq__h2">
         Kurz erklärt.<br>
-        <span class="black">In Tiefe dokumentiert.</span>
+        <strong>In Tiefe dokumentiert.</strong>
       </h2>
       <p class="ign-faq__lead">
         Die wichtigsten Fragen aus Planungs-Workshops — mit sofort zitierbaren Kurzantworten
         und technischer Tiefe für Detailprüfung.
       </p>
-      <div class="ign-faq__actions">
-        <a class="ign-btn ign-btn--ghost-dark" href="/wissen/">Vollständige Wissensdatenbank →</a>
-      </div>
+      <a class="ign-btn ign-btn--ghost-dark" href="/wissen/">Vollständige Wissensdatenbank →</a>
     </div>
 
     <div class="ign-faq__list">
@@ -109,9 +107,7 @@ $schema = [
 </script>
 
 <style>
-.ign-faq {
-  background: var(--bone);
-}
+.ign-faq { background: var(--bone); }
 .ign-faq__inner {
   display: grid;
   grid-template-columns: 1fr 1.4fr;
@@ -121,13 +117,13 @@ $schema = [
 .ign-faq__h2 {
   font-family: var(--ff-display);
   font-weight: 500;
-  font-size: clamp(32px, 4vw, 48px);
+  font-size: clamp(32px, 3.6vw, 48px);
   line-height: 1.03;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.035em;
   color: var(--slateblue);
   margin: 10px 0 14px;
 }
-.ign-faq__h2 .black { font-weight: 900; }
+.ign-faq__h2 strong { font-weight: 900; }
 .ign-faq__lead {
   font-family: var(--ff-body);
   font-weight: 300;
@@ -137,10 +133,8 @@ $schema = [
   max-width: 48ch;
   margin: 0 0 24px;
 }
-.ign-faq__actions { margin-top: 16px; }
 
 .ign-faq__list { display: flex; flex-direction: column; gap: 4px; }
-
 .ign-faq__item {
   background: var(--bone-50);
   border: 1px solid rgba(21,34,52,0.06);
@@ -152,7 +146,6 @@ $schema = [
   border-color: rgba(121,57,7,0.25);
   box-shadow: var(--shadow-2);
 }
-
 .ign-faq__q {
   list-style: none;
   display: flex;
@@ -164,7 +157,6 @@ $schema = [
   user-select: none;
 }
 .ign-faq__q::-webkit-details-marker { display: none; }
-
 .ign-faq__q-text {
   font-family: var(--ff-display);
   font-weight: 600;
@@ -185,7 +177,8 @@ $schema = [
   background: var(--copper-solid);
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  transition: transform var(--dur-base) var(--ease-standard);
+  transition: transform var(--dur-base) var(--ease-standard),
+              opacity var(--dur-base) var(--ease-standard);
 }
 .ign-faq__q-icon::before { width: 14px; height: 2px; }
 .ign-faq__q-icon::after { width: 2px; height: 14px; }
@@ -224,29 +217,10 @@ $schema = [
 
 ---
 
-## 3 · SEO/GEO-Notiz
+## 3 · Verifikation
 
-- **FAQPage JSON-LD** wird von Google oft als Featured Snippet oder "People Also Ask"-Block angezeigt.
-- **Short-Answer-First Prinzip**: Erste 1–2 Sätze sind bold/eingerückt (copper-border) → LLMs erkennen die prägnante Antwort.
-- **6 Fragen** decken die Top-5-Anfragen + eine Zertifizierungs-Frage ab.
-- Die 6 Antworten enthalten insgesamt 12+ zitierbare Einzel-Fakten (Löschkonzentration, Wartungsintervall, Normen, Wirkmechanismus, GWP/ODP, PFAS-Freiheit …).
-
-## 4 · Verifikation
-
-- [ ] Sticky-Copy links, Accordion-Liste rechts (Desktop)
-- [ ] Erstes FAQ-Item standardmäßig geöffnet
-- [ ] Plus → schließt zu Minus beim Öffnen
+- [ ] FAQPage-JSON-LD valid im Google Rich Results Test
+- [ ] Erstes FAQ-Item standardmäßig offen
+- [ ] Plus → Minus beim Aufklappen, ohne JavaScript
 - [ ] Short-Answer mit Copper-Border-Left
-- [ ] Google Rich Results Test: `FAQPage` valid
-- [ ] Keine JS-Abhängigkeit für das Accordion (native `<details>`)
 - [ ] Mobile: 1 Spalte
-
-## 5 · Anpassungspunkte
-
-- **FAQ-Einträge**: `$faqs`-Array. Jedes Item hat `q`, `a_short`, `a_long`.
-- **Erstes offen**: Per `<details open>`-Attribut — wird automatisch für Index 0 gesetzt.
-- **Anzahl**: Google empfiehlt 3–10 FAQs auf einer Page. Mehr kann das Schema verwässern.
-
----
-
-**Nach Verifikation → STEP 3.8 (Final-CTA) freigeben.**

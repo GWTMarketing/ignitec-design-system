@@ -89,21 +89,22 @@ Design → Menüs → Menü erstellen (für jedes Menü einmal):
 - [ ] Inhalt aus `wp/bricks-widgets/step-2-footer.md` kopieren
 - [ ] Speichern → Vorschau → Check: CTA-Strip + 4-Spalten-Grid + Copyright
 
-## TEIL 9 · Homepage bauen (STEP 3.1 bis 3.8) · 60 Min
+## TEIL 9 · Homepage bauen (STEP 3.1 bis 3.8) · 75 Min
 
-Die Seite "Start" mit Bricks öffnen. **8 Sections** sequenziell einfügen, in jeder 1 Code-Element mit Execute-code.
+Die Seite "Start" mit Bricks öffnen. Reihenfolge folgt dem Mockup `home.html`. **In jeder Section 1 Code-Element mit Execute-code ✅**.
 
-- [ ] **Section 1 — Hero** · Inhalt aus `step-3-1-hero.md`
-- [ ] **Section 2 — Stat Bar** · Inhalt aus `step-3-2-statbar.md`
-- [ ] **Section 3 — Produkt-Highlights** · Inhalt aus `step-3-3-product-highlights.md`
-      *(zeigt leeren Zustand — OK, füllt sich ab STEP 4)*
-- [ ] **Section 4 — Anwendungen** · Inhalt aus `step-3-4-applications.md`
-- [ ] **Section 5 — Technologie-USP** · Inhalt aus `step-3-5-technology-usp.md`
-- [ ] **Section 6 — Prozess** · Inhalt aus `step-3-6-process.md`
-- [ ] **Section 7 — FAQ** · Inhalt aus `step-3-7-faq.md`
-- [ ] **Section 8 — Kontakt-Teaser** · Inhalt aus `step-3-8-contact-teaser.md`
-- [ ] Speichern → Frontend `/` prüfen → Alle 8 Sections sichtbar
+- [ ] **Section 1 — Hero** · Inhalt aus `step-3-1-hero.md` (Spark-Canvas, rotierende Ringe, Aerosol-Unit, Stat-Micro)
+- [ ] **Section 2 — USP** · Inhalt aus `step-3-2-usp.md` (6 Eigenschaften, 3×2-Grid)
+- [ ] **Section 3 — Produkt-Teaser** · Inhalt aus `step-3-3-product-highlights.md` *(zeigt leeren Zustand — OK, füllt sich ab STEP 4)*
+- [ ] **Section 4 — Anwendungen** · Inhalt aus `step-3-4-applications.md` (6 Use-Cases dunkel)
+- [ ] **Section 5 — Referenz** · Inhalt aus `step-3-5-reference.md` (Quote)
+- [ ] **Section 6 — Stat Bar** · Inhalt aus `step-3-6-statbar.md` (4 Werte slate-blue)
+- [ ] **Section 7 — CTA** · Inhalt aus `step-3-7-cta.md` (Copper + Glass-Card)
+      ⚠ Wenn aktiv: globalen CTA-Strip in STEP 2 (`step-2-footer.md`) entfernen, sonst Doppelung
+- [ ] **Section 8 — FAQ** · Inhalt aus `step-3-8-faq.md` (optional, GEO-Bonus)
+- [ ] Speichern → Frontend `/` prüfen → Alle Sections sichtbar
 - [ ] Responsive-Check: 375 / 768 / 1440 px
+- [ ] Hero-Check: Ringe rotieren, Aerosol-Unit zentriert, Spark-Canvas läuft
 
 ## TEIL 10 · Anwendungen-CPT (STEP 6) · 30 Min
 
@@ -182,9 +183,22 @@ Wenn die 15 Teile alle abgehakt sind, sind wir bereit für:
 - **STEP 4** — Shop-Archiv (nach Anlage der ersten echten WC-Produkte)
 - **STEP 5** — Produkt-Single
 
-Dafür brauchst du dann mindestens ein paar **echte Produkte** in WooCommerce:
-- Produkt-Name, SKU, Kurzbeschreibung
-- Beitragsbild
-- Attribute (serie, einsatzbereich, ausloesung, montage, norm) setzen
-- Tab "Ignitec Technische Daten" ausfüllen (Masse, Volumen, Entladezeit, etc.)
-- Homepage-Highlight aktivieren bei 6 Top-Produkten
+Dafür brauchst du dann **echte Produkte** in WooCommerce. Empfohlene 8 Größen (siehe `step-3-3-product-highlights.md` Abschnitt 1):
+
+| SKU | Name | Größe | Schutzvolumen |
+|---|---|---|---|
+| IGNI-ST030 | Ignitec Mini Plus  | 30 g | 0,4 m³ |
+| IGNI-ST060 | Ignitec Mini      | 60 g | 0,8 m³ |
+| IGNI-ST100 | Ignitec Small     | 100 g | 1,4 m³ |
+| IGNI-ST150 | Ignitec Smart     | 150 g | 2,1 m³ |
+| IGNI-ST250 | Ignitec Compact   | 250 g | 3,4 m³ |
+| IGNI-ST500 | Ignitec Standard  | 500 g | 6,8 m³ |
+| IGNI-ST1000 | Ignitec Pro      | 1,0 kg | 13,6 m³ |
+| IGNI-ST2000 | Ignitec Pro XL   | 2,0 kg | 27,2 m³ |
+
+Pro Produkt:
+- Produkt-Name, SKU, Kurzbeschreibung (1 Satz, wird als Karten-Description ausgegeben)
+- Beitragsbild (Produkt-Render auf transparentem Hintergrund)
+- Attribute (`pa_serie`, `pa_einsatzbereich`, `pa_ausloesung`, `pa_montage`, `pa_norm`) setzen
+- Tab "Ignitec Technische Daten": Masse, Volumen, Entladezeit, Abmessungen, Gewicht, Temp.-Bereich
+- "Homepage-Highlight" aktivieren bei den 4 Top-Produkten (Mini, Compact, Standard, Pro)

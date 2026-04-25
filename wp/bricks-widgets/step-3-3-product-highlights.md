@@ -1,44 +1,48 @@
-# STEP 3.3 — Homepage · Produkt-Highlights (Serie ST)
+# STEP 3.3 — Homepage · Produkt-Teaser (Serie ST · 8 Größen)
 
-6 Gerätegrößen der Aerosolgenerator-Serie, **vollständig dynamisch** aus WooCommerce. Jede Karte ist eine WC-Produkt-Instanz mit gepflegten Meta-Daten — ändert sich ein Wert im Backend, ändert sich auch die Homepage.
+4 Karten mit Copper-Gradient-Tile und SKU-Overlay, gepflegt in WooCommerce. Section-Head links (Eyebrow + H2), rechts ein Outline-Button "Alle Produkte ansehen". Acht Größen insgesamt — die Karten sind die 4 wichtigsten Größen für den Vorschau-Block.
 
-**GEO-Bonus:** Intro-Copy enthält die Auslegungs-Formel (100 g/m³) — LLMs können diese Regel direkt zitieren.
+**Quelle:** Mockup `home.html` (Product-Teaser). 4-spaltiges Grid mit `prod-tile`-Pattern aus dem Design-System.
 
 ---
 
 ## 1 · Vorbedingung · WooCommerce-Produkte anlegen
 
-Für jedes Gerät **ein WC-Produkt** anlegen (Backend → Produkte → Hinzufügen). Empfohlene Basis-Daten:
+Für jedes Gerät ein WC-Produkt anlegen. Empfohlene Basis-Daten:
 
-| SKU | Name | `pa_serie` | `_ignitec_aerosol_masse_g` | `_ignitec_schutzvolumen_m3` | `_ignitec_entladezeit_s` | `_ignitec_auslegungspflicht` | `_ignitec_featured` |
-|---|---|---|---|---|---|---|---|
-| IGNI.ST030G.E/TH | Aerosolgenerator · 30 g  | ST-30G  | 30  | 0.3 | 6  | aus | ein |
-| IGNI.ST060G.E/TH | Aerosolgenerator · 60 g  | ST-60G  | 60  | 0.6 | 10 | aus | ein |
-| IGNI.ST100G.E/TH | Aerosolgenerator · 100 g | ST-100G | 100 | 1.0 | 15 | aus | ein |
-| IGNI.ST150G.E/TH | Aerosolgenerator · 150 g | ST-150G | 150 | 1.5 | 20 | aus | ein |
-| IGNI.ST250G.E/TH | Aerosolgenerator · 250 g | ST-250G | 250 | 2.5 | 25 | **ein** | ein |
-| IGNI.ST500G.E/TH | Aerosolgenerator · 500 g | ST-500G | 500 | 5.0 | 32 | **ein** | ein |
+| SKU | Name | Größe | Schutzvolumen | Featured? |
+|---|---|---|---|---|
+| IGNI-ST030 | Ignitec Mini Plus  | 30 g | 0,4 m³ | aus |
+| **IGNI-ST060** | **Ignitec Mini**     | **60 g** | **0,8 m³** | **ein** |
+| IGNI-ST100 | Ignitec Small      | 100 g | 1,4 m³ | aus |
+| IGNI-ST150 | Ignitec Smart      | 150 g | 2,1 m³ | aus |
+| **IGNI-ST250** | **Ignitec Compact**  | **250 g** | **3,4 m³** | **ein** |
+| **IGNI-ST500** | **Ignitec Standard** | **500 g** | **6,8 m³** | **ein** |
+| **IGNI-ST1000** | **Ignitec Pro**      | **1,0 kg** | **13,6 m³** | **ein** |
+| IGNI-ST2000 | Ignitec Pro XL     | 2,0 kg | 27,2 m³ | aus |
 
-SKU gehört ins WooCommerce-Standard-Feld "SKU" (Tab "Lagerbestand"). Preise können leer bleiben (Angebot auf Anfrage) oder gesetzt werden.
+Die 4 fett markierten Größen sind im Mockup als Featured ausgewählt. SKU gehört in das WooCommerce-Standard-Feld (Tab "Lagerbestand").
 
----
+Für jedes Featured-Produkt zusätzlich pflegen:
+- `_ignitec_featured = yes`
+- `_ignitec_aerosol_masse_g`, `_ignitec_schutzvolumen_m3`, `_ignitec_entladezeit_s`
+- WooCommerce-Kurzbeschreibung (1 Satz, wird als `desc` ausgegeben)
 
 ## 2 · Platzierung
 
-**Bricks → Pages → Startseite** — **3. Section** unter der Stat-Bar. Container Full-Width, darin **1 Code-Element** (Execute code ✅).
+**Bricks → Pages → Startseite** — **3. Section** unter dem USP-Grid. Container Full-Width, darin **1 Code-Element** (Execute code ✅).
 
 ## 3 · Code-Widget-Inhalt
 
 ```php
 <?php
 /**
- * IGNITEC · Produkt-Highlights (WooCommerce Query-Loop)
- * Zeigt alle WC-Produkte mit _ignitec_featured = "yes".
- * Komplett dynamisch — Bearbeitung ausschließlich im WC-Backend.
+ * IGNITEC · Produkt-Teaser (4 Featured-Produkte aus WooCommerce)
+ * Quelle: Mockup home.html — Section "Acht Größen. Ein System."
  */
 $q = new WP_Query( [
 	'post_type'      => 'product',
-	'posts_per_page' => 6,
+	'posts_per_page' => 4,
 	'orderby'        => [ 'meta_value_num' => 'ASC', 'menu_order' => 'ASC' ],
 	'meta_key'       => '_ignitec_aerosol_masse_g',
 	'meta_query'     => [
@@ -52,48 +56,52 @@ $q = new WP_Query( [
 <section class="ign-products ign-section" aria-labelledby="ign-products-head">
   <div class="ign-container">
 
-    <span class="eyebrow">PRODUKTE · SERIE ST</span>
-    <h2 id="ign-products-head" class="ign-products__h2">
-      Sechs Gerätegrößen.<br>
-      <span class="black">Ein Auslegungsprinzip.</span>
-    </h2>
-    <p class="ign-products__lead">
-      Löschkonzentration <strong>100 g/m³</strong> — die Gerätewahl folgt dem geschützten Volumen.
-      Geräte ab 250 g sind <strong>auslegungspflichtig</strong> nach CEN/TR 15276-1.
-    </p>
+    <div class="ign-products__head">
+      <div>
+        <span class="eyebrow">Produktfamilie</span>
+        <h2 id="ign-products-head" class="ign-products__h2">
+          Acht Größen.<br>
+          <strong>Ein System.</strong>
+        </h2>
+      </div>
+      <a class="ign-btn ign-btn--ghost-dark" href="<?php echo esc_url( get_post_type_archive_link( 'product' ) ); ?>">
+        Alle Produkte ansehen →
+      </a>
+    </div>
 
     <?php if ( $q->have_posts() ) : ?>
       <div class="ign-products__grid">
         <?php while ( $q->have_posts() ) : $q->the_post();
-          $pid        = get_the_ID();
-          $sku        = get_post_meta( $pid, '_sku', true );
-          $masse_g    = get_post_meta( $pid, '_ignitec_aerosol_masse_g', true );
-          $volume_m3  = get_post_meta( $pid, '_ignitec_schutzvolumen_m3', true );
-          $zeit_s     = get_post_meta( $pid, '_ignitec_entladezeit_s', true );
-          $auslegung  = get_post_meta( $pid, '_ignitec_auslegungspflicht', true ) === 'yes';
+          $pid       = get_the_ID();
+          $sku       = get_post_meta( $pid, '_sku', true );
+          $masse_g   = get_post_meta( $pid, '_ignitec_aerosol_masse_g', true );
+          $volume_m3 = get_post_meta( $pid, '_ignitec_schutzvolumen_m3', true );
+          $excerpt   = wp_strip_all_tags( get_the_excerpt() );
+
+          // Größe formatieren (60 → "60 g", 1000 → "1,0 kg")
+          if ( $masse_g >= 1000 ) {
+            $size_label = number_format( $masse_g / 1000, 1, ',', '' ) . ' kg';
+          } else {
+            $size_label = (int) $masse_g . ' g';
+          }
         ?>
-          <a class="ign-product-card" href="<?php echo esc_url( get_permalink() ); ?>">
-            <div class="ign-product-card__icon">
-              <img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/mark-white.png' ); ?>"
-                   alt="" width="30" height="30" loading="lazy" decoding="async">
-            </div>
-            <div class="ign-product-card__body">
+          <a class="ign-prod-card" href="<?php echo esc_url( get_permalink() ); ?>">
+            <div class="ign-prod-card__tile">
+              <span class="ign-prod-card__size"><?php echo esc_html( $size_label ); ?></span>
               <?php if ( $sku ) : ?>
-                <div class="ign-product-card__sku"><?php echo esc_html( $sku ); ?></div>
+                <span class="ign-prod-card__sku-overlay"><?php echo esc_html( $sku ); ?></span>
               <?php endif; ?>
-              <div class="ign-product-card__name">
-                <?php echo esc_html( get_the_title() ); ?>
-              </div>
-              <div class="ign-product-card__specs">
-                <?php if ( $volume_m3 !== '' ) : ?>
-                  Für <?php echo esc_html( str_replace( '.', ',', $volume_m3 ) ); ?> m³
-                <?php endif; ?>
-                <?php if ( $zeit_s !== '' ) : ?>
-                  · ≤ <?php echo esc_html( $zeit_s ); ?> s
-                <?php endif; ?>
-              </div>
-              <?php if ( $auslegung ) : ?>
-                <span class="ign-product-card__badge">AUSLEGUNGSPFLICHTIG</span>
+              <?php if ( has_post_thumbnail() ) : ?>
+                <?php the_post_thumbnail( 'medium', [ 'class' => 'ign-prod-card__img', 'loading' => 'lazy' ] ); ?>
+              <?php endif; ?>
+            </div>
+            <div class="ign-prod-card__meta">
+              <?php if ( $volume_m3 !== '' ) : ?>
+                <div class="ign-prod-card__sku-txt">Löschvolumen · <?php echo esc_html( str_replace( '.', ',', $volume_m3 ) ); ?> m³</div>
+              <?php endif; ?>
+              <div class="ign-prod-card__name"><?php echo esc_html( get_the_title() ); ?></div>
+              <?php if ( $excerpt ) : ?>
+                <div class="ign-prod-card__desc"><?php echo esc_html( $excerpt ); ?></div>
               <?php endif; ?>
             </div>
           </a>
@@ -106,164 +114,147 @@ $q = new WP_Query( [
       </p>
     <?php endif; ?>
 
-    <div class="ign-products__all">
-      <a class="ign-btn ign-btn--ghost-dark" href="<?php echo esc_url( get_post_type_archive_link( 'product' ) ); ?>">
-        Alle Geräte und Zubehör →
-      </a>
-    </div>
   </div>
 </section>
 
 <style>
 .ign-products {
-  background: var(--bone);
+  background: var(--bone-50);
+}
+.ign-products__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+  margin-bottom: 48px;
 }
 .ign-products__h2 {
   font-family: var(--ff-display);
   font-weight: 500;
-  font-size: clamp(36px, 4.6vw, 52px);
+  font-size: clamp(32px, 3.6vw, 52px);
   line-height: 1.03;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.035em;
   color: var(--slateblue);
-  margin: 10px 0 8px;
+  margin: 10px 0 0;
 }
-.ign-products__h2 .black { font-weight: 900; }
-.ign-products__lead {
-  font-family: var(--ff-body);
-  font-weight: 300;
-  font-size: 17px;
-  color: var(--fg-2);
-  max-width: 60ch;
-  margin: 0 0 36px;
-}
-.ign-products__lead strong { color: var(--slateblue); font-weight: 600; }
+.ign-products__h2 strong { font-weight: 900; }
 
 .ign-products__grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
 }
-.ign-product-card {
-  background: var(--bone-50);
-  border-radius: var(--r-4);
-  padding: 22px;
-  box-shadow: var(--shadow-2);
-  display: grid;
-  grid-template-columns: 72px 1fr;
-  gap: 18px;
-  align-items: center;
-  text-decoration: none;
-  color: inherit;
-  transition: transform var(--dur-fast) var(--ease-standard),
-              box-shadow var(--dur-base) var(--ease-standard);
-}
-.ign-product-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-3);
+
+.ign-prod-card {
+  background: var(--bone);
+  display: block;
   text-decoration: none;
   color: inherit;
 }
-.ign-product-card__icon {
-  width: 72px; height: 72px;
+.ign-prod-card:hover {
+  text-decoration: none;
+  color: inherit;
+}
+.ign-prod-card__tile {
+  position: relative;
+  aspect-ratio: 1;
   background: var(--gradient-copper);
   border-radius: var(--r-3);
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform var(--dur-base) var(--ease-standard),
+              box-shadow var(--dur-base) var(--ease-standard);
 }
-.ign-product-card__icon img {
-  width: 30px;
-  height: 30px;
-  object-fit: contain;
+.ign-prod-card:hover .ign-prod-card__tile {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-3);
 }
-.ign-product-card__body { min-width: 0; }
-.ign-product-card__sku {
+.ign-prod-card__img {
+  width: 42%;
+  height: auto;
+  filter: drop-shadow(0 4px 20px rgba(0,0,0,0.25));
+}
+.ign-prod-card__size {
+  position: absolute;
+  top: 14px; right: 16px;
+  font-family: var(--ff-display);
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--bone);
+}
+.ign-prod-card__sku-overlay {
+  position: absolute;
+  bottom: 14px; left: 16px;
   font-family: var(--ff-mono);
   font-weight: 500;
   font-size: 10px;
-  letter-spacing: 0.18em;
-  color: var(--copper-solid);
-  word-break: break-all;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bone);
+  opacity: 0.85;
 }
-.ign-product-card__name {
+.ign-prod-card__meta {
+  padding: 16px 4px 0;
+}
+.ign-prod-card__sku-txt {
+  font-family: var(--ff-mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.ign-prod-card__name {
   font-family: var(--ff-display);
   font-weight: 600;
-  font-size: 22px;
-  letter-spacing: -0.02em;
+  font-size: 18px;
+  letter-spacing: -0.01em;
   color: var(--slateblue);
-  margin-top: 2px;
-  line-height: 1.15;
-}
-.ign-product-card__specs {
-  font-family: var(--ff-body);
-  font-weight: 300;
-  font-size: 13px;
-  color: var(--fg-2);
   margin-top: 4px;
 }
-.ign-product-card__badge {
-  display: inline-block;
-  margin-top: 8px;
-  font-family: var(--ff-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: var(--copper-solid);
-  background: var(--bone-200);
-  padding: 3px 8px;
-  border-radius: var(--r-pill);
+.ign-prod-card__desc {
+  font-family: var(--ff-body);
+  font-weight: 300;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--fg-2);
+  margin-top: 4px;
 }
 
 .ign-products__empty {
   padding: 32px;
-  background: var(--bone-50);
+  background: var(--bone);
   border-radius: var(--r-4);
   color: var(--fg-2);
   text-align: center;
 }
 
-.ign-products__all {
-  margin-top: 32px;
-  display: flex;
-  justify-content: center;
-}
-
 @media (max-width: 960px) {
+  .ign-products__head { flex-direction: column; align-items: flex-start; gap: 16px; }
   .ign-products__grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 560px) {
   .ign-products__grid { grid-template-columns: 1fr; }
-  .ign-product-card { grid-template-columns: 56px 1fr; padding: 18px; }
-  .ign-product-card__icon { width: 56px; height: 56px; }
-  .ign-product-card__name { font-size: 19px; }
 }
 </style>
 ```
 
 ---
 
-## 4 · SEO/GEO-Notiz
+## 4 · Verifikation
 
-- **Auslegungs-Regel im Fließtext:** "Löschkonzentration 100 g/m³" — LLMs können dies als harten Fakt zitieren.
-- **SKU sichtbar** — technischer Suchbegriff für B2B-Käufer:innen.
-- **Karten sind `<a>`-Links** auf die WC-Single-Page — jede Karte ist vollflächig klickbar (bessere CTR).
-- **Kein AJAX / Client-Loading** — Produkt-Daten sind im HTML-Source sofort sichtbar.
+- [ ] 4 Karten als 4-spaltiges Grid Desktop, 2 Tablet, 1 Mobile
+- [ ] Tiles mit Copper-Gradient + Größen-Overlay rechts oben + SKU-Overlay links unten
+- [ ] Falls Beitragsbild gesetzt: zentriertes Produkt-PNG mit Drop-Shadow
+- [ ] Hover: Tile hebt sich leicht
+- [ ] Karten sind komplett klickbar
+- [ ] Bei leerem Zustand: dezenter Hinweis-Text
 
-## 5 · Verifikation
+## 5 · Anpassungspunkte
 
-- [ ] 6 Karten erscheinen sortiert nach Aerosolmasse (aufsteigend)
-- [ ] SKU, Name, "Für X m³ · ≤ Y s", Badge "AUSLEGUNGSPFLICHTIG" bei 250/500g
-- [ ] Klick auf Karte führt auf `/produkt/…`-Permalink
-- [ ] Admin ändert `_ignitec_schutzvolumen_m3` → Frontend spiegelt Änderung nach Refresh
-- [ ] "Alle Geräte und Zubehör →" führt zum Shop-Archiv
-- [ ] Mobile 1-Spaltig, Karten mit kleinerem Icon
-
-## 6 · Anpassungspunkte
-
-- **Intro-Copy** direkt im HTML.
-- **Anzahl der Karten**: `posts_per_page` im WP_Query.
-- **Sortierung**: `orderby` → `date`/`menu_order`/`meta_value_num` je nach Wunsch.
-- **Filter**: Weitere `meta_query`-Klauseln einfügen, z. B. nur bestimmte `pa_einsatzbereich`-Terms.
-
----
-
-**Nach Verifikation → STEP 3.4 (Anwendungen) freigeben.**
+- **Anzahl der Featured-Karten:** `posts_per_page = 4` → bei Bedarf auf 6/8 ändern
+- **Sortierung:** `orderby` aktuell aufsteigend nach Aerosolmasse — kann auf `menu_order` umgestellt werden
+- **Größen-Format:** g → "60 g", kg → "1,0 kg" (deutsches Komma) — siehe PHP-Block
