@@ -42,7 +42,7 @@ Im Code-Element:
 $menu_locations = get_nav_menu_locations();
 $menu_obj       = isset( $menu_locations['primary'] ) ? wp_get_nav_menu_object( $menu_locations['primary'] ) : null;
 $menu_items     = $menu_obj ? wp_get_nav_menu_items( $menu_obj->term_id ) : [];
-$logo_url       = get_stylesheet_directory_uri() . '/assets/logo-full-white.svg';
+$logo_url       = get_stylesheet_directory_uri() . '/assets/logo-full-white.png';
 $cta_url        = '/kontakt/';
 $cta_label      = 'Angebot anfordern';
 ?>
@@ -53,11 +53,7 @@ $cta_label      = 'Angebot anfordern';
   <div class="ign-header__inner">
 
     <a class="ign-header__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="Ignitec — Startseite">
-      <svg viewBox="0 0 140 140" width="30" height="30" aria-hidden="true" focusable="false">
-        <rect x="10" y="10" width="120" height="120" rx="4" fill="none" stroke="currentColor" stroke-width="3"/>
-        <path d="M42 118 V42 h24 c18 0 30 12 30 30 v46 h-18 v-44 c0 -9 -4 -14 -12 -14 h-7 v58 z" fill="currentColor"/>
-      </svg>
-      <span class="ign-header__wordmark">Ignitec</span>
+      <img src="<?php echo esc_url( $logo_url ); ?>" alt="Ignitec" width="148" height="36" decoding="async">
     </a>
 
     <nav class="ign-header__nav" aria-label="Hauptnavigation">
@@ -102,6 +98,9 @@ $cta_label      = 'Angebot anfordern';
           </li>
         <?php endforeach; endif; ?>
       </ul>
+      <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="ign-offcanvas__logo" aria-label="Ignitec — Startseite">
+        <img src="<?php echo esc_url( $logo_url ); ?>" alt="Ignitec" width="120" height="29" decoding="async">
+      </a>
     </nav>
     <a class="ign-btn ign-btn--primary ign-offcanvas__cta" href="<?php echo esc_url( $cta_url ); ?>">
       <?php echo esc_html( $cta_label ); ?>
@@ -148,10 +147,21 @@ $cta_label      = 'Angebot anfordern';
   color: var(--bone); text-decoration: none;
 }
 .ign-header__logo:hover { color: var(--bone); text-decoration: none; }
-.ign-header__wordmark {
-  font-family: var(--ff-logo);
-  font-weight: 600; font-size: 20px;
-  letter-spacing: -0.035em; color: var(--bone);
+.ign-header__logo img {
+  display: block;
+  height: 30px;
+  width: auto;
+}
+.ign-header[data-state="scrolled"] .ign-header__logo img { height: 26px; }
+.ign-offcanvas__logo {
+  margin-top: auto;
+  display: inline-block;
+}
+.ign-offcanvas__logo img {
+  display: block;
+  height: 26px;
+  width: auto;
+  filter: none;
 }
 .ign-header__nav { flex: 1; }
 .ign-header__menu {
@@ -319,7 +329,7 @@ $cta_label      = 'Angebot anfordern';
 
 ## 6 · Anpassungspunkte (im Code)
 
-- **Logo-URL**: Die Inline-SVG kann durch `<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/logo-full-white.svg' ); ?>">` ersetzt werden, sobald das Logo im Child-Theme unter `/assets/` liegt.
+- **Logo-Datei:** Erwartet wird `wp-content/themes/ignitec-child/assets/logo-full-white.png` (aus dem Design-System unter `extracted/assets/logo-full-white.png` kopieren). Bei Bedarf in `$logo_url` auf einen anderen Pfad zeigen.
 - **CTA-URL**: `$cta_url` am Anfang des Blocks umstellen (derzeit `/kontakt/`).
 - **Region-Label**: String `DE · AT` im HTML direkt anpassen oder via Bricks Options auslagern.
 - **Farbe "aktiv"**: `#F4A962` in `.ign-header__link.is-active` — bei Bedarf austauschen.

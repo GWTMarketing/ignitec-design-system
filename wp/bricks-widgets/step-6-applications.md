@@ -153,9 +153,8 @@ if ( $filter_term ) {
       ?>
         <a class="ign-product-card" href="<?php echo esc_url( get_permalink( $p ) ); ?>">
           <div class="ign-product-card__icon">
-            <svg viewBox="0 0 140 140" width="30" height="30" aria-hidden="true" focusable="false">
-              <path d="M42 118 V42 h24 c18 0 30 12 30 30 v46 h-18 v-44 c0 -9 -4 -14 -12 -14 h-7 v58 z" fill="#F5F2EC"/>
-            </svg>
+            <img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/mark-white.png' ); ?>"
+                 alt="" width="30" height="30" loading="lazy" decoding="async">
           </div>
           <div class="ign-product-card__body">
             <?php if ( $p->_sku ) : ?>

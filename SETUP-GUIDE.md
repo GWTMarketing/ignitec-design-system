@@ -18,13 +18,21 @@ Jede Box abhaken, wenn erledigt. Zeitangaben sind grobe Richtwerte.
 
 ## TEIL 2 · Child-Theme hochladen (15 Min)
 
-- [ ] Im Repo den Ordner `wp/theme/ignitec-child/` als **ZIP packen** (style.css + functions.php)
-- [ ] Archivo-Fonts aus dem Design-System in den ZIP-Ordner `ignitec-child/fonts/` legen:
+Vor dem Zippen den `ignitec-child/`-Ordner mit den Brand-Assets befüllen:
+
+- [ ] **Ordner `ignitec-child/fonts/`** anlegen und befüllen mit den Archivo-Variablefonts aus dem Design-System (`extracted/fonts/`):
   - `Archivo-VariableFont_wdth_wght.ttf`
   - `Archivo-Italic-VariableFont_wdth_wght.ttf`
+- [ ] **Ordner `ignitec-child/assets/`** anlegen und befüllen mit den Logos aus `extracted/assets/`:
+  - `logo-full-white.png` (Header + Footer — wird auf dunklem Grund verwendet)
+  - `logo-full-official.png` (Reserve für helle Hintergründe)
+  - `mark-white.png` (kleine Karten-Icons)
+  - `mark-copper-gradient.png` (optional)
+- [ ] Komplett-Ordner `ignitec-child/` als **ZIP** packen
 - [ ] WP-Admin → Design → Themes → Neues Theme → Hochladen → ZIP wählen → Installieren
 - [ ] **"Ignitec Child (Bricks)" aktivieren**
 - [ ] Kontrolle: Design → Themes zeigt "Ignitec Child (Bricks)" als aktiv
+- [ ] **Logo-Sichtprüfung:** Frontend `/` neu laden → in Header oben links muss die echte "IgniTec"-Wortmarke (Copper-Mark + dunkle/helle Type) erscheinen, kein Platzhalter
 
 ## TEIL 3 · WordPress-Grundkonfiguration (10 Min)
 

@@ -116,13 +116,10 @@ $schema = [
 
     <div class="ign-footer__grid">
       <div class="ign-footer__brand">
-        <div class="ign-footer__logo">
-          <svg viewBox="0 0 140 140" width="28" height="28" aria-hidden="true" focusable="false">
-            <rect x="10" y="10" width="120" height="120" rx="4" fill="none" stroke="currentColor" stroke-width="3"/>
-            <path d="M42 118 V42 h24 c18 0 30 12 30 30 v46 h-18 v-44 c0 -9 -4 -14 -12 -14 h-7 v58 z" fill="currentColor"/>
-          </svg>
-          <span class="ign-footer__wordmark">Ignitec</span>
-        </div>
+        <a class="ign-footer__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="Ignitec — Startseite">
+          <img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/logo-full-white.png' ); ?>"
+               alt="Ignitec" width="148" height="36" decoding="async">
+        </a>
         <address class="ign-footer__address">
           <?php echo esc_html( $company['name'] ); ?><br>
           <?php echo esc_html( $company['street'] ); ?><br>
@@ -217,18 +214,14 @@ $schema = [
   gap: 32px;
 }
 .ign-footer__logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--bone);
+  display: inline-block;
   margin-bottom: 14px;
+  text-decoration: none;
 }
-.ign-footer__wordmark {
-  font-family: var(--ff-logo);
-  font-weight: 600;
-  font-size: 20px;
-  letter-spacing: -0.035em;
-  color: var(--bone);
+.ign-footer__logo img {
+  display: block;
+  height: 30px;
+  width: auto;
 }
 .ign-footer__address {
   font-family: var(--ff-body);
