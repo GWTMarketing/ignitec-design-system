@@ -1,6 +1,8 @@
 # STEP 3.8 — Homepage · FAQ (optional · GEO-Erweiterung)
 
-6 native `<details>`-Accordions mit FAQPage-JSON-LD. **Nicht** im Mockup `home.html` enthalten, aber **stark empfohlen** für Featured-Snippets und LLM-Zitate. Brand-konform: dezente Bone-Bühne, Short-Answer-First, native HTML-Elemente ohne JS.
+6 native `<details>`-Accordions. **Nicht** im Mockup `home.html` enthalten, aber **stark empfohlen** für Content-Tiefe. Brand-konform: dezente Bone-Bühne, Short-Answer-First, native HTML-Elemente ohne JS.
+
+> **FAQ-Schema:** wird über **Rank Math Pro Schema-Block** generiert, nicht inline (siehe `step-rank-math.md`). Der Inhalt unten ist die sichtbare Fassade — Rank Math liest sie und produziert daraus das `FAQPage`-JSON-LD im Head.
 
 **Position:** als letzte Section auf der Homepage, **unter** dem CTA aus STEP 3.7. Wer den CTA als Final-Section möchte, kann diesen Step überspringen.
 
@@ -15,8 +17,9 @@
 ```php
 <?php
 /**
- * IGNITEC · FAQ (native <details>) + FAQPage JSON-LD
+ * IGNITEC · FAQ (native <details>)
  * Short-Answer-First — optimiert für Featured Snippets und LLM-Zitate.
+ * Schema kommt von Rank Math Pro (FAQ Schema-Block).
  */
 
 $faqs = [
@@ -50,21 +53,6 @@ $faqs = [
 		'a_short' => 'CEN/TR 15276-1 (europäische Auslegungsregel für kondensierte Aerosole) und ISO 15779. Typprüfung nach EN 15276. VdS- und UL-Listungen verfügbar.',
 		'a_long' => 'Die Auslegung nach CEN/TR 15276-1 ist in Deutschland, Österreich und weiteren EU-Staaten anerkannt. ISO 15779 bildet die internationale Basis. Für VdS-geforderte Objekte (Versicherungsvorgaben) bieten wir gelistete Varianten; UL-2775 wird für den US-Export angeboten. Maschinen-Richtlinie 2006/42/EG, EMV-Richtlinie und CE-Kennzeichnung sind bei allen Geräten erfüllt.',
 	],
-];
-
-$schema = [
-	'@context'  => 'https://schema.org',
-	'@type'     => 'FAQPage',
-	'mainEntity' => array_map( function ( $f ) {
-		return [
-			'@type' => 'Question',
-			'name'  => $f['q'],
-			'acceptedAnswer' => [
-				'@type' => 'Answer',
-				'text'  => $f['a_short'] . ' ' . $f['a_long'],
-			],
-		];
-	}, $faqs ),
 ];
 ?>
 
@@ -101,10 +89,6 @@ $schema = [
 
   </div>
 </section>
-
-<script type="application/ld+json">
-<?php echo wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); ?>
-</script>
 
 <style>
 .ign-faq { background: var(--bone); }
@@ -219,7 +203,7 @@ $schema = [
 
 ## 3 · Verifikation
 
-- [ ] FAQPage-JSON-LD valid im Google Rich Results Test
+- [ ] FAQPage-Schema wird über Rank Math im Head ausgegeben (Google Rich Results Test)
 - [ ] Erstes FAQ-Item standardmäßig offen
 - [ ] Plus → Minus beim Aufklappen, ohne JavaScript
 - [ ] Short-Answer mit Copper-Border-Left

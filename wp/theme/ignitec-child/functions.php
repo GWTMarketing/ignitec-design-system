@@ -351,91 +351,7 @@ remove_action( 'wp_head', 'wlwmanifest_link' );
 
 
 /* =========================================================
- * 8 · CUSTOM POST TYPE · IGNITEC_APPLICATION
- *
- * Redaktionelle Anwendungs-Seiten (BESS, Schaltschrank, …)
- * mit eigener URL-Struktur /anwendungen/<slug>/. Produkt-Listen
- * werden dynamisch per pa_einsatzbereich-Attribut eingebunden.
- * ========================================================= */
-
-add_action( 'init', function () {
-	register_post_type( 'ignitec_application', [
-		'labels' => [
-			'name'               => __( 'Anwendungen', 'ignitec' ),
-			'singular_name'      => __( 'Anwendung', 'ignitec' ),
-			'add_new_item'       => __( 'Neue Anwendung', 'ignitec' ),
-			'edit_item'          => __( 'Anwendung bearbeiten', 'ignitec' ),
-			'all_items'          => __( 'Alle Anwendungen', 'ignitec' ),
-			'menu_name'          => __( 'Anwendungen', 'ignitec' ),
-		],
-		'public'              => true,
-		'has_archive'         => 'anwendungen',
-		'rewrite'             => [ 'slug' => 'anwendungen', 'with_front' => false ],
-		'supports'            => [ 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields' ],
-		'menu_icon'           => 'dashicons-shield',
-		'menu_position'       => 22,
-		'show_in_rest'        => true,
-	] );
-} );
-
-// Custom Meta · Anwendungs-Seite
-add_action( 'add_meta_boxes', function () {
-	add_meta_box(
-		'ignitec_app_meta',
-		__( 'Ignitec Anwendungs-Daten', 'ignitec' ),
-		function ( $post ) {
-			wp_nonce_field( 'ignitec_app_meta', 'ignitec_app_meta_nonce' );
-			$lead       = get_post_meta( $post->ID, '_ignitec_app_lead', true );
-			$volume_txt = get_post_meta( $post->ID, '_ignitec_app_volume_range', true );
-			$risk_txt   = get_post_meta( $post->ID, '_ignitec_app_risk', true );
-			$filter_tax = get_post_meta( $post->ID, '_ignitec_app_filter_term', true );
-			?>
-			<p>
-				<label><strong><?php esc_html_e( 'Lead / Kurzintro (für Hero)', 'ignitec' ); ?></strong></label><br>
-				<textarea name="_ignitec_app_lead" rows="3" style="width:100%;"><?php echo esc_textarea( $lead ); ?></textarea>
-			</p>
-			<p>
-				<label><strong><?php esc_html_e( 'Typisches Schutzvolumen (z. B. "0,3 – 5 m³")', 'ignitec' ); ?></strong></label><br>
-				<input type="text" name="_ignitec_app_volume_range" value="<?php echo esc_attr( $volume_txt ); ?>" style="width:100%;">
-			</p>
-			<p>
-				<label><strong><?php esc_html_e( 'Typische Risiken (kurzer Fließtext)', 'ignitec' ); ?></strong></label><br>
-				<textarea name="_ignitec_app_risk" rows="2" style="width:100%;"><?php echo esc_textarea( $risk_txt ); ?></textarea>
-			</p>
-			<p>
-				<label><strong><?php esc_html_e( 'Slug aus pa_einsatzbereich für Produkt-Filter (z. B. "bess", "schaltschrank")', 'ignitec' ); ?></strong></label><br>
-				<input type="text" name="_ignitec_app_filter_term" value="<?php echo esc_attr( $filter_tax ); ?>" style="width:100%;">
-			</p>
-			<?php
-		},
-		'ignitec_application',
-		'normal',
-		'default'
-	);
-} );
-
-add_action( 'save_post_ignitec_application', function ( $post_id ) {
-	if ( ! isset( $_POST['ignitec_app_meta_nonce'] ) ) { return; }
-	if ( ! wp_verify_nonce( $_POST['ignitec_app_meta_nonce'], 'ignitec_app_meta' ) ) { return; }
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) { return; }
-	if ( ! current_user_can( 'edit_post', $post_id ) ) { return; }
-
-	$fields = [
-		'_ignitec_app_lead'         => 'textarea',
-		'_ignitec_app_volume_range' => 'text',
-		'_ignitec_app_risk'         => 'textarea',
-		'_ignitec_app_filter_term'  => 'text',
-	];
-	foreach ( $fields as $key => $type ) {
-		$raw = isset( $_POST[ $key ] ) ? wp_unslash( $_POST[ $key ] ) : '';
-		$clean = $type === 'textarea' ? sanitize_textarea_field( $raw ) : sanitize_text_field( $raw );
-		update_post_meta( $post_id, $key, $clean );
-	}
-} );
-
-
-/* =========================================================
- * 9 · KONTAKT-FORMULAR · HANDLER
+ * 8 · KONTAKT-FORMULAR · HANDLER
  *
  * Verarbeitet POST aus dem Bricks-Code-Widget Kontaktformular.
  * - Nonce + Honeypot + einfache Rate-Limit via Transient
@@ -575,7 +491,7 @@ function ignitec_handle_inquiry() {
 
 
 /* =========================================================
- * 10 · BREVO · NEWSLETTER-API (OPTIONAL)
+ * 9 · BREVO · NEWSLETTER-API (OPTIONAL)
  *
  * Nutzt entweder:
  * - Konstante IGNITEC_BREVO_API_KEY + IGNITEC_BREVO_LIST_ID in wp-config.php
@@ -620,7 +536,7 @@ function ignitec_brevo_subscribe( $email, $attrs = [] ) {
 
 
 /* =========================================================
- * 11 · ADMIN-SEITE · IGNITEC-EINSTELLUNGEN
+ * 10 · ADMIN-SEITE · IGNITEC-EINSTELLUNGEN
  *
  * Minimales Settings-Panel (ohne Plugin). Hier werden
  * Brevo-API-Key + List-ID gepflegt, falls nicht via wp-config.

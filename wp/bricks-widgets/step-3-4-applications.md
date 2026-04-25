@@ -31,42 +31,42 @@ Vollflächige Sektion auf Ink-Carrier mit 6 Anwendungs-Zellen. Section-Head spli
     </div>
 
     <div class="ign-apps__grid">
-      <a class="ign-apps__cell" href="/anwendungen/bess/">
+      <a class="ign-apps__cell" href="/anwendungen/#bess">
         <div class="ign-apps__no">01</div>
         <div>
           <div class="ign-apps__name">BESS &amp;<br>Batterie­speicher</div>
           <div class="ign-apps__dx">Thermal Runaway, Li-Ion-Racks</div>
         </div>
       </a>
-      <a class="ign-apps__cell" href="/anwendungen/schaltanlagen/">
+      <a class="ign-apps__cell" href="/anwendungen/#schaltanlagen">
         <div class="ign-apps__no">02</div>
         <div>
           <div class="ign-apps__name">Schalt­anlagen &amp;<br>Trafostationen</div>
           <div class="ign-apps__dx">NSHV, MSHV, Umspannwerke</div>
         </div>
       </a>
-      <a class="ign-apps__cell" href="/anwendungen/serverraum/">
+      <a class="ign-apps__cell" href="/anwendungen/#serverraum">
         <div class="ign-apps__no">03</div>
         <div>
           <div class="ign-apps__name">Daten­zentren &amp;<br>Serverräume</div>
           <div class="ign-apps__dx">Rack-Level, Raumflutung</div>
         </div>
       </a>
-      <a class="ign-apps__cell" href="/anwendungen/maschinenraum/">
+      <a class="ign-apps__cell" href="/anwendungen/#maschinenraum">
         <div class="ign-apps__no">04</div>
         <div>
           <div class="ign-apps__name">Maschinen &amp;<br>CNC-Zentren</div>
           <div class="ign-apps__dx">Kapselung, Öl- und Spänebrände</div>
         </div>
       </a>
-      <a class="ign-apps__cell" href="/anwendungen/fahrzeug/">
+      <a class="ign-apps__cell" href="/anwendungen/#fahrzeug">
         <div class="ign-apps__no">05</div>
         <div>
           <div class="ign-apps__name">Busse, Bahn &amp;<br>Sonder­fahrzeuge</div>
           <div class="ign-apps__dx">Motorraum, Batteriekasten</div>
         </div>
       </a>
-      <a class="ign-apps__cell" href="/anwendungen/windkraft/">
+      <a class="ign-apps__cell" href="/anwendungen/#windkraft">
         <div class="ign-apps__no">06</div>
         <div>
           <div class="ign-apps__name">Wind­kraft &amp;<br>Anlagentechnik</div>
@@ -182,7 +182,7 @@ Vollflächige Sektion auf Ink-Carrier mit 6 Anwendungs-Zellen. Section-Head spli
 - [ ] 6 Zellen Desktop, 3 Tablet, 2 Mobile-XL, 1 Mobile-S
 - [ ] Hairline-Trenngrid via 1px Background-Color
 - [ ] Hover: Zelle wird heller (Ink-100 → Ink-200)
-- [ ] Klick führt auf `/anwendungen/<slug>/` (CPT-Single)
+- [ ] Klick führt auf `/anwendungen/#<anchor>` (Sektion auf der Übersichts-Seite — siehe `step-6-applications.md`)
 
 ## 4 · Anpassungspunkte
 

@@ -1,6 +1,8 @@
 # STEP 7 — Kontakt-Seite (`/kontakt/`)
 
-Volle Kontakt-Seite: Intro-Hero, komplettes Formular (alle Projekt-Felder), Firmeninfo-Karte, datenschutzfreundliche OpenStreetMap, LocalBusiness-JSON-LD.
+Volle Kontakt-Seite: Intro-Hero, komplettes Formular (alle Projekt-Felder), Firmeninfo-Karte, datenschutzfreundliche OpenStreetMap.
+
+> **Schema:** `LocalBusiness` mit GeoCoordinates und OpeningHours wird über **Rank Math Pro** (Schema-Tab der Page) generiert. Siehe `step-rank-math.md`.
 
 **Voraussetzung:** `functions.php` Abschnitt 9–11 geladen, und das Kontaktformular-Widget verstanden (siehe `widget-contact-form.md`).
 
@@ -19,7 +21,7 @@ In der Page-Edit-Ansicht mit Bricks die Seite öffnen → 3 Sections:
 
 1. Section Full-Width → **1 Code-Element**: Hero-Intro (siehe Abschnitt 3)
 2. Section Full-Width → **1 Code-Element**: Form + Info-Grid (siehe Abschnitt 4)
-3. Section Full-Width → **1 Code-Element**: Map + LocalBusiness (siehe Abschnitt 5)
+3. Section Full-Width → **1 Code-Element**: OSM-Map (Abschnitt 5) — Schema läuft global über Rank Math
 
 Alternativ: Alle drei Blöcke in ein einziges Code-Element — dann in der Entwurfs-UI als **1 Code-Widget pro Section** pflegen für einfache Editierbarkeit.
 
@@ -399,7 +401,7 @@ $nonce      = wp_create_nonce( 'ignitec_inquiry' );
 
 ---
 
-## 5 · Sektion C · Map + LocalBusiness JSON-LD
+## 5 · Sektion C · OSM-Map
 
 ```php
 <?php
@@ -410,35 +412,8 @@ $osm_url = sprintf(
 	'https://www.openstreetmap.org/export/embed.html?bbox=%F%%2C%F%%2C%F%%2C%F&layer=mapnik&marker=%F%%2C%F',
 	$lng - 0.01, $lat - 0.005, $lng + 0.01, $lat + 0.005, $lat, $lng
 );
-
-$localbiz = [
-	'@context'  => 'https://schema.org',
-	'@type'     => 'LocalBusiness',
-	'name'      => 'Ignitec GmbH',
-	'url'       => home_url( '/' ),
-	'email'     => 'office@ignitec.at',
-	'address'   => [
-		'@type'           => 'PostalAddress',
-		'streetAddress'   => 'Michael-Hainisch-Straße 8',
-		'postalCode'      => '2493',
-		'addressLocality' => 'Lichtenwörth',
-		'addressCountry'  => 'AT',
-	],
-	'geo'       => [
-		'@type'     => 'GeoCoordinates',
-		'latitude'  => $lat,
-		'longitude' => $lng,
-	],
-	'openingHoursSpecification' => [
-		[
-			'@type'     => 'OpeningHoursSpecification',
-			'dayOfWeek' => [ 'Monday','Tuesday','Wednesday','Thursday','Friday' ],
-			'opens'     => '08:00',
-			'closes'    => '17:00',
-		],
-	],
-	'areaServed' => [ 'DE', 'AT', 'CH' ],
-];
+// Schema (LocalBusiness, OpeningHours, GeoCoordinates) kommt aus Rank Math Pro,
+// nicht inline — siehe step-rank-math.md.
 ?>
 
 <section class="ign-contact-map" aria-label="Anfahrt">
@@ -466,10 +441,6 @@ $localbiz = [
     </div>
   </div>
 </section>
-
-<script type="application/ld+json">
-<?php echo wp_json_encode( $localbiz, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); ?>
-</script>
 
 <style>
 .ign-contact-map { background: var(--bone); padding: 72px 0; }
@@ -507,16 +478,15 @@ $localbiz = [
 
 ## 6 · SEO/GEO-Notiz
 
-- **LocalBusiness JSON-LD** aktiviert Google Maps Pack und Local-Packs für "Brandschutz Lichtenwörth", "Aerosol-Löschanlage Österreich".
-- **Öffnungszeiten** maschinenlesbar — Google kann "Jetzt geöffnet"-Badge anzeigen.
-- **AreaServed** DE/AT/CH — stärkt Reichweite über Österreich hinaus.
+- **LocalBusiness-Schema** wird über Rank Math Pro im Page-Editor zugewiesen — aktiviert Google Maps Pack und Local-Packs für "Brandschutz Lichtenwörth", "Aerosol-Löschanlage Österreich".
+- **Öffnungszeiten** und **AreaServed** ebenfalls in Rank Math pflegen.
 - **OpenStreetMap** statt Google Maps: keine Third-Party-Cookies, kein Consent-Banner nötig.
 
 ## 7 · Verifikation
 
 - [ ] `/kontakt/` zeigt 3 Sections: Intro, Form+Info, Map
 - [ ] Formular submit → Erfolgs-Banner ersetzt Formular
-- [ ] LocalBusiness Schema.org valid im Rich Results Test
+- [ ] LocalBusiness-Schema (via Rank Math Pro) valid im Rich Results Test
 - [ ] Map lädt ohne Cookie-Warnung
 - [ ] Responsive: Alle Sections ab 960px single-column
 - [ ] Brevo (wenn konfiguriert): Opt-In registriert Kontakt in Liste

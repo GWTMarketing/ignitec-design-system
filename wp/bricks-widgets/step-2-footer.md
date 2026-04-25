@@ -2,7 +2,7 @@
 
 Kombiniert den **CTA-Strip** (Copper-Gradient, "Gemeinsam auslegen. Ruhig entscheiden.") und den **Footer** (4 Spalten Menü + Logo + Firma + Claim + Copyright) in einem einzigen Code-Widget.
 
-Enthält Schema.org `Organization` + `ContactPoint` JSON-LD direkt im Footer — einmal gerendert, auf allen Seiten präsent.
+> **Schema/SEO-Hinweis:** Die Schema.org-Markups (Organization, ContactPoint) werden **nicht inline** generiert, sondern global über **Rank Math Pro** (siehe `step-rank-math.md`). Damit gibt es keine Doppelung im DOM.
 
 ---
 
@@ -38,7 +38,7 @@ Im Template **1 Code-Element** einfügen (Execute code ✅).
  * IGNITEC · CTA-Strip + Footer (Bricks Code Element)
  * · Rendert CTA-Band + 4-Spalten-Footer
  * · Menüs aus WP-Slots (footer_produkt, footer_anwendung, footer_company, footer_service)
- * · Schema.org Organization + ContactPoint als JSON-LD (GEO-ready)
+ * · Schema.org-Markup wird über Rank Math Pro generiert, nicht inline
  */
 
 $company = [
@@ -65,29 +65,6 @@ $menus = [
 	[ 'heading' => 'Anwendung',   'items' => $render_menu( 'footer_anwendung' ) ],
 	[ 'heading' => 'Unternehmen', 'items' => $render_menu( 'footer_company' ) ],
 	[ 'heading' => 'Service',     'items' => $render_menu( 'footer_service' ) ],
-];
-
-$schema = [
-	'@context' => 'https://schema.org',
-	'@type'    => 'Organization',
-	'name'     => $company['name'],
-	'url'      => $company['url'],
-	'email'    => $company['email'],
-	'address'  => [
-		'@type'           => 'PostalAddress',
-		'streetAddress'   => $company['street'],
-		'postalCode'      => $company['zip'],
-		'addressLocality' => $company['city'],
-		'addressCountry'  => $company['country'],
-	],
-	'contactPoint' => [
-		'@type'       => 'ContactPoint',
-		'email'       => $company['email'],
-		'contactType' => 'customer support',
-		'areaServed'  => [ 'DE', 'AT', 'CH' ],
-		'availableLanguage' => [ 'de' ],
-	],
-	'slogan' => 'REACTION · PROTECTION · SOLUTION',
 ];
 ?>
 
@@ -153,10 +130,6 @@ $schema = [
     </div>
   </div>
 </footer>
-
-<script type="application/ld+json">
-<?php echo wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); ?>
-</script>
 
 <style>
 /* ============ CTA STRIP ============ */
@@ -302,10 +275,9 @@ $schema = [
 
 ## 4 · SEO / GEO Notizen
 
-- **Schema.org JSON-LD** wird serverseitig gerendert (keine JS-Abhängigkeit) — Google Rich Results Test: valid `Organization`.
-- **AreaServed** = DE/AT/CH → verbessert lokale Sichtbarkeit.
+- **Organization-Schema** wird über **Rank Math Pro** zentral generiert, nicht inline (siehe `step-rank-math.md`).
 - **Claim-Zeile** ist für LLM-Crawler ideal (kurz, einzigartig, semantisch sichtbar).
-- **Adresse** als `<address>`-Tag — zusätzliches Semantik-Signal.
+- **Adresse** als `<address>`-Tag — zusätzliches Semantik-Signal für Crawler.
 
 ## 5 · Verifikation
 
@@ -314,8 +286,8 @@ $schema = [
 - [ ] Footer dunkel, 4 Spalten + Brand-Spalte
 - [ ] Menü-Einträge kommen aus den 4 WP-Menü-Slots
 - [ ] Copyright-Jahr dynamisch
-- [ ] Rich-Results-Test: `Organization` valid
 - [ ] Mobile: Single-Column, CTA-Actions nebeneinander, Button-Min-Width respektiert
+- [ ] Schema-Validierung erfolgt nach Rank-Math-Konfiguration (siehe `step-rank-math.md`)
 
 ## 6 · Anpassungspunkte
 
