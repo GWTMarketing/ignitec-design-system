@@ -162,23 +162,110 @@ add_action( 'woocommerce_product_data_panels', function () {
 	] );
 
 	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_durchmesser_mm',
+		'label'       => __( 'Durchmesser Ø (mm)', 'ignitec' ),
+		'type'        => 'number',
+		'custom_attributes' => [ 'step' => '0.1', 'min' => '0' ],
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_hoehe_mm',
+		'label'       => __( 'Höhe (mm)', 'ignitec' ),
+		'type'        => 'number',
+		'custom_attributes' => [ 'step' => '0.1', 'min' => '0' ],
+	] );
+
+	woocommerce_wp_text_input( [
 		'id'          => '_ignitec_gewicht_kg',
-		'label'       => __( 'Gewicht (kg)', 'ignitec' ),
+		'label'       => __( 'Bruttogewicht inkl. Gehäuse (kg)', 'ignitec' ),
 		'type'        => 'number',
 		'custom_attributes' => [ 'step' => '0.01', 'min' => '0' ],
 	] );
 
 	woocommerce_wp_text_input( [
 		'id'          => '_ignitec_temp_bereich',
-		'label'       => __( 'Temperaturbereich', 'ignitec' ),
-		'placeholder' => '−40 °C … +95 °C',
+		'label'       => __( 'Betriebstemperaturbereich', 'ignitec' ),
+		'placeholder' => '−40 °C bis +95 °C',
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_temp_lagerung',
+		'label'       => __( 'Lagertemperaturbereich', 'ignitec' ),
+		'placeholder' => '−54 °C bis +75 °C',
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_feuchte_max',
+		'label'       => __( 'Max. relative Luftfeuchte', 'ignitec' ),
+		'placeholder' => 'bis 98 % nicht kondensierend',
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_partikelgroesse',
+		'label'       => __( 'Aerosolpartikelgröße D50', 'ignitec' ),
+		'placeholder' => '≤ 2,5 µm',
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_brandklassen',
+		'label'       => __( 'Brandklassen', 'ignitec' ),
+		'placeholder' => 'A · B · C · F · E (elektr.)',
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_reaktionszeit',
+		'label'       => __( 'Reaktionszeit nach Zündung', 'ignitec' ),
+		'placeholder' => '≤ 18 s',
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_ausloesung_elektrisch',
+		'label'       => __( 'Elektrische Auslösung', 'ignitec' ),
+		'placeholder' => '24 V DC · 1,5 A / 1 s',
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_ausloesung_thermisch',
+		'label'       => __( 'Thermische Auslösung', 'ignitec' ),
+		'placeholder' => '170 °C (Rückfallebene)',
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_widerstand_zuendkreis',
+		'label'       => __( 'Widerstand Zündkreis', 'ignitec' ),
+		'placeholder' => '1,8 ± 0,3 Ω',
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_schnittstelle',
+		'label'       => __( 'Schnittstelle', 'ignitec' ),
+		'placeholder' => '2-adrig · Steckverbinder M12',
 	] );
 
 	woocommerce_wp_text_input( [
 		'id'          => '_ignitec_lagerzeit_jahre',
-		'label'       => __( 'Lagerzeit (Jahre)', 'ignitec' ),
+		'label'       => __( 'Lagerfähigkeit (Jahre)', 'ignitec' ),
 		'type'        => 'number',
 		'custom_attributes' => [ 'step' => '1', 'min' => '0' ],
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_garantie_jahre',
+		'label'       => __( 'Garantie (Jahre)', 'ignitec' ),
+		'type'        => 'number',
+		'custom_attributes' => [ 'step' => '1', 'min' => '0' ],
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_typpruefung',
+		'label'       => __( 'Typprüfung', 'ignitec' ),
+		'placeholder' => 'EN 15276 Teil 1 & 2',
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_ce_norm',
+		'label'       => __( 'CE-Kennzeichnung / Konformität', 'ignitec' ),
+		'placeholder' => '2014/34/EU konform (ATEX II 3G)',
 	] );
 
 	woocommerce_wp_text_input( [
@@ -196,14 +283,51 @@ add_action( 'woocommerce_product_data_panels', function () {
 
 	woocommerce_wp_text_input( [
 		'id'          => '_ignitec_ip_schutz',
-		'label'       => __( 'IP-Schutzart', 'ignitec' ),
-		'placeholder' => 'IP40',
+		'label'       => __( 'IP-Schutzart Gehäuse', 'ignitec' ),
+		'placeholder' => 'IP54',
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_lieferzeit',
+		'label'       => __( 'Lieferzeit', 'ignitec' ),
+		'placeholder' => '2–3 Wochen ab Werk',
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_mindestbestellung',
+		'label'       => __( 'Mindestbestellmenge', 'ignitec' ),
+		'placeholder' => '1 Stück (Projekt) · 10 (OEM)',
 	] );
 
 	woocommerce_wp_text_input( [
 		'id'          => '_ignitec_datenblatt_pdf',
-		'label'       => __( 'Datenblatt-PDF (URL)', 'ignitec' ),
-		'description' => __( 'URL zur hochgeladenen PDF-Datei in der Mediathek.', 'ignitec' ),
+		'label'       => __( 'Datenblatt DE (URL)', 'ignitec' ),
+		'description' => __( 'URL zur PDF-Datei.', 'ignitec' ),
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_datasheet_en_pdf',
+		'label'       => __( 'Datasheet EN (URL)', 'ignitec' ),
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_sdb_pdf',
+		'label'       => __( 'Sicherheitsdatenblatt SDB (URL)', 'ignitec' ),
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_cad_zip',
+		'label'       => __( 'CAD 3D-Modell (ZIP-URL)', 'ignitec' ),
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_bohrbild_zip',
+		'label'       => __( 'Bohrbild 2D (ZIP-URL)', 'ignitec' ),
+	] );
+
+	woocommerce_wp_text_input( [
+		'id'          => '_ignitec_pruefbericht_pdf',
+		'label'       => __( 'Prüfbericht EN 15276 (URL)', 'ignitec' ),
 	] );
 
 	echo '</div>';
@@ -213,19 +337,40 @@ add_action( 'woocommerce_product_data_panels', function () {
 add_action( 'woocommerce_process_product_meta', function ( $post_id ) {
 
 	$fields = [
-		'_ignitec_featured'          => 'checkbox',
-		'_ignitec_auslegungspflicht' => 'checkbox',
-		'_ignitec_aerosol_masse_g'   => 'float',
-		'_ignitec_schutzvolumen_m3'  => 'float',
-		'_ignitec_entladezeit_s'     => 'float',
-		'_ignitec_abmessungen_mm'    => 'string',
-		'_ignitec_gewicht_kg'        => 'float',
-		'_ignitec_temp_bereich'      => 'string',
-		'_ignitec_lagerzeit_jahre'   => 'int',
-		'_ignitec_gwp'               => 'int',
-		'_ignitec_odp'               => 'float',
-		'_ignitec_ip_schutz'         => 'string',
-		'_ignitec_datenblatt_pdf'    => 'url',
+		'_ignitec_featured'             => 'checkbox',
+		'_ignitec_auslegungspflicht'    => 'checkbox',
+		'_ignitec_aerosol_masse_g'      => 'float',
+		'_ignitec_schutzvolumen_m3'     => 'float',
+		'_ignitec_entladezeit_s'        => 'float',
+		'_ignitec_abmessungen_mm'       => 'string',
+		'_ignitec_durchmesser_mm'       => 'float',
+		'_ignitec_hoehe_mm'             => 'float',
+		'_ignitec_gewicht_kg'           => 'float',
+		'_ignitec_temp_bereich'         => 'string',
+		'_ignitec_temp_lagerung'        => 'string',
+		'_ignitec_feuchte_max'          => 'string',
+		'_ignitec_partikelgroesse'      => 'string',
+		'_ignitec_brandklassen'         => 'string',
+		'_ignitec_reaktionszeit'        => 'string',
+		'_ignitec_ausloesung_elektrisch'=> 'string',
+		'_ignitec_ausloesung_thermisch' => 'string',
+		'_ignitec_widerstand_zuendkreis'=> 'string',
+		'_ignitec_schnittstelle'        => 'string',
+		'_ignitec_lagerzeit_jahre'      => 'int',
+		'_ignitec_garantie_jahre'       => 'int',
+		'_ignitec_typpruefung'          => 'string',
+		'_ignitec_ce_norm'              => 'string',
+		'_ignitec_gwp'                  => 'int',
+		'_ignitec_odp'                  => 'float',
+		'_ignitec_ip_schutz'            => 'string',
+		'_ignitec_lieferzeit'           => 'string',
+		'_ignitec_mindestbestellung'    => 'string',
+		'_ignitec_datenblatt_pdf'       => 'url',
+		'_ignitec_datasheet_en_pdf'     => 'url',
+		'_ignitec_sdb_pdf'              => 'url',
+		'_ignitec_cad_zip'              => 'url',
+		'_ignitec_bohrbild_zip'         => 'url',
+		'_ignitec_pruefbericht_pdf'     => 'url',
 	];
 
 	foreach ( $fields as $key => $type ) {
